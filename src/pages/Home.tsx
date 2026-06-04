@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import {
   Bot,
@@ -10,6 +11,7 @@ import {
   Trophy,
   BarChart3,
   Brain,
+  Megaphone,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { TopGainersLiveFeed } from "../components/home/TopGainersLiveFeed";
@@ -22,6 +24,18 @@ import { VerseMindset } from "../components/home/VerseMindset";
 import { AboutVerse } from "../components/home/AboutVerse";
 
 export default function Home() {
+  const [adminAlert, setAdminAlert] = useState("");
+
+  useEffect(() => {
+    const dataStr = localStorage.getItem('adminData');
+    if (dataStr) {
+      try {
+        const data = JSON.parse(dataStr);
+        if (data.homepageAlert) setAdminAlert(data.homepageAlert);
+      } catch(e) {}
+    }
+  }, []);
+
   const tools = [
     {
       title: "AI Chat",
@@ -147,6 +161,17 @@ export default function Home() {
             </p>
           </motion.div>
         </section>
+
+        {adminAlert && (
+           <div className="px-4 z-10 mt-[-20px] mb-4 relative max-w-3xl mx-auto w-full">
+              <div className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/50 backdrop-blur-md rounded-2xl p-4 flex items-center gap-4 text-cyan-50 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+                 <Megaphone className="w-8 h-8 text-cyan-400 shrink-0 animate-pulse" />
+                 <p className="font-bold tracking-wide text-sm md:text-base leading-relaxed">
+                   {adminAlert}
+                 </p>
+              </div>
+           </div>
+        )}
 
       {/* Tools Section */}
       <section className="relative z-10 w-full px-4 mt-6">

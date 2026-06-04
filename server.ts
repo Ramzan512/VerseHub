@@ -3,27 +3,30 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import Parser from "rss-parser";
+import cors from "cors";
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+// Export the app for Vercel Serverless Functions
+export const app = express();
+app.use(express.json());
+app.use(cors());
 
-  app.use(express.json());
+// API router
+export const apiRouter = express.Router();
+app.use("/api", apiRouter);
 
-  // API router
-  const apiRouter = express.Router();
-
-  // Lazy init Gemini
-  let ai: GoogleGenAI | null = null;
-  const getAi = () => {
-    if (!ai) {
-      if (!process.env.GEMINI_API_KEY) {
-        throw new Error("GEMINI_API_KEY environment variable is missing.");
-      }
-      ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Lazy init Gemini
+let ai: GoogleGenAI | null = null;
+const getAi = () => {
+  if (!ai) {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY environment variable is missing.");
     }
-    return ai;
-  };
+    ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  }
+  return ai;
+};
+
+function registerRoutes() {
 
   apiRouter.post("/chat", async (req, res) => {
     try {
@@ -976,9 +979,17 @@ async function startServer() {
     }
   });
 
+  // Move Vite and Listen logic to a separate function
   app.use("/api", apiRouter);
+}
 
-  // Vite middleware for development
+// Register all API routes synchronously BEFORE returning app or skipping start
+registerRoutes();
+
+async function startViteAndListen() {
+  if (process.env.VERCEL) return;
+  const PORT = 3000;
+
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -998,4 +1009,5 @@ async function startServer() {
   });
 }
 
-startServer();
+startViteAndListen();
+export default app;

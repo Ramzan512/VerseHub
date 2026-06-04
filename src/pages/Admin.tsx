@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { Card, CardContent } from '../components/ui/card';
-import { Settings, ShieldCheck, AlertCircle, RefreshCw, Key, Zap, CheckCircle2, Activity, LogOut, Edit3, Plus, Trash2, Pin, EyeOff, CheckSquare } from 'lucide-react';
+import { Settings, ShieldCheck, AlertCircle, RefreshCw, Key, Zap, CheckCircle2, Activity, LogOut, Edit3, Plus, Trash2, Pin, EyeOff, CheckSquare, Save } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 export default function Admin() {
@@ -8,12 +8,36 @@ export default function Admin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  const [announcement, setAnnouncement] = useState('');
+  const [eventNotice, setEventNotice] = useState('');
+  const [homepageAlert, setHomepageAlert] = useState('');
+
   useEffect(() => {
     const auth = localStorage.getItem('adminAuth');
     if (auth === 'true') {
       setIsAuthenticated(true);
+      
+      const adminDataStr = localStorage.getItem('adminData');
+      if (adminDataStr) {
+        try {
+          const data = JSON.parse(adminDataStr);
+          setAnnouncement(data.announcement || '');
+          setEventNotice(data.eventNotice || '');
+          setHomepageAlert(data.homepageAlert || '');
+        } catch(e) {}
+      }
     }
   }, []);
+
+  const saveAdminData = () => {
+    const data = {
+      announcement,
+      eventNotice,
+      homepageAlert
+    };
+    localStorage.setItem('adminData', JSON.stringify(data));
+    alert('Settings saved successfully!');
+  };
 
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
@@ -21,6 +45,15 @@ export default function Admin() {
       setIsAuthenticated(true);
       localStorage.setItem('adminAuth', 'true');
       setError(null);
+      const adminDataStr = localStorage.getItem('adminData');
+      if (adminDataStr) {
+        try {
+          const data = JSON.parse(adminDataStr);
+          setAnnouncement(data.announcement || '');
+          setEventNotice(data.eventNotice || '');
+          setHomepageAlert(data.homepageAlert || '');
+        } catch(e) {}
+      }
     } else {
       setError('Invalid password');
     }
@@ -87,13 +120,15 @@ export default function Admin() {
         <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
           <CardContent className="p-6">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <AlertCircle className="w-5 h-5 text-yellow-400" /> Announcement Manager
+               <AlertCircle className="w-5 h-5 text-yellow-400" /> Announcements
             </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Plus className="w-4 h-4 mr-2" /> Create Announcement</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Edit3 className="w-4 h-4 mr-2" /> Edit Announcement</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Pin className="w-4 h-4 mr-2" /> Pin to Homepage</Button>
-               <Button variant="outline" className="w-full justify-start text-red-400 hover:text-red-300 border-white/10 hover:bg-red-500/10"><Trash2 className="w-4 h-4 mr-2" /> Delete Announcement</Button>
+            <div className="space-y-4">
+               <textarea
+                 value={announcement}
+                 onChange={(e) => setAnnouncement(e.target.value)}
+                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-yellow-500/50 focus:outline-none min-h-[100px]"
+                 placeholder="Enter announcement text..."
+               />
             </div>
           </CardContent>
         </Card>
@@ -102,71 +137,41 @@ export default function Admin() {
         <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
           <CardContent className="p-6">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <Activity className="w-5 h-5 text-purple-400" /> Events Manager
+               <Activity className="w-5 h-5 text-purple-400" /> Events & Notices
             </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Plus className="w-4 h-4 mr-2" /> Add Event</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Edit3 className="w-4 h-4 mr-2" /> Edit Event</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Settings className="w-4 h-4 mr-2" /> Set Date/Time</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><CheckSquare className="w-4 h-4 mr-2" /> Feature on Homepage</Button>
-               <Button variant="outline" className="w-full justify-start text-red-400 hover:text-red-300 border-white/10 hover:bg-red-500/10"><Trash2 className="w-4 h-4 mr-2" /> Delete Event</Button>
+            <div className="space-y-4">
+               <textarea
+                 value={eventNotice}
+                 onChange={(e) => setEventNotice(e.target.value)}
+                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500/50 focus:outline-none min-h-[100px]"
+                 placeholder="Enter event details or notices..."
+               />
             </div>
           </CardContent>
         </Card>
 
-        {/* 3. News Manager */}
+        {/* 3. Homepage Alerts */}
         <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
           <CardContent className="p-6">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <CheckCircle2 className="w-5 h-5 text-emerald-400" /> News Manager
+               <Edit3 className="w-5 h-5 text-cyan-400" /> Homepage Alert Box
             </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Pin className="w-4 h-4 mr-2" /> Pin Important News</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><CheckSquare className="w-4 h-4 mr-2" /> Feature Selected News</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><EyeOff className="w-4 h-4 mr-2" /> Hide News</Button>
+            <div className="space-y-4">
+               <textarea
+                 value={homepageAlert}
+                 onChange={(e) => setHomepageAlert(e.target.value)}
+                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500/50 focus:outline-none min-h-[100px]"
+                 placeholder="Important alert banner for homepage..."
+               />
             </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* 4. Homepage Manager */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <Edit3 className="w-5 h-5 text-cyan-400" /> Homepage Manager
-            </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Edit3 className="w-4 h-4 mr-2" /> Edit Hero Banner Text</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Edit3 className="w-4 h-4 mr-2" /> Edit Ticker Text</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Settings className="w-4 h-4 mr-2" /> Enable/Disable Widgets</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 5. Verse Information Manager */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <Settings className="w-5 h-5 text-blue-400" /> Verse Info Manager
-            </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Edit3 className="w-4 h-4 mr-2" /> Update Ecosystem Info</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><RefreshCw className="w-4 h-4 mr-2" /> Update Community Links</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 6. Football Manager */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
-               <Activity className="w-5 h-5 text-green-400" /> Football Manager
-            </h3>
-            <div className="space-y-2">
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><CheckSquare className="w-4 h-4 mr-2" /> Feature Matches</Button>
-               <Button variant="outline" className="w-full justify-start text-white/70 hover:text-white border-white/10 hover:bg-white/5"><Pin className="w-4 h-4 mr-2" /> Pin Tournaments</Button>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex justify-center mt-12">
+         <Button onClick={saveAdminData} className="px-8 py-6 text-lg font-bold bg-cyan-500 hover:bg-cyan-400 text-black rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+           <Save className="w-6 h-6" /> Save All Changes
+         </Button>
       </div>
     </div>
   );

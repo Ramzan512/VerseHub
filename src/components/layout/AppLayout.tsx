@@ -12,15 +12,10 @@ export default function AppLayout() {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'AI Tools', path: '/chat' },
-    { name: 'Crypto Market', path: '/' },
+    { name: 'News Hub', path: '/news' },
     { name: 'Football Center', path: '/football' },
     { name: 'Verse Community', path: 'https://verse.bitcoin.com/', isExternal: true },
-    { name: 'Telegram Community', path: 'https://t.me/GetVerse', isExternal: true },
-    { name: 'Community Events', path: 'https://t.me/GetVerse/379189', isExternal: true },
-    { name: 'Vibe Coding Hub', path: 'https://t.me/GetVerse/486213', isExternal: true },
-    { name: 'About VERSE', path: 'https://verse.bitcoin.com/', isExternal: true },
-    { name: 'Verse Ecosystem', path: 'https://x.com/VerseEcosystem', isExternal: true },
-    { name: 'Verse News Hub', path: '/news' },
+    { name: 'Events Hub', path: 'https://t.me/GetVerse/379189', isExternal: true },
     { name: 'Admin Panel', path: '/admin' },
   ];
 

@@ -23,20 +23,6 @@ export function VerseMindset() {
       icon: Zap,
       color: "from-yellow-400 to-orange-500",
       glow: "rgba(250,204,21,0.5)"
-    },
-    {
-      title: "GROWTH",
-      desc: "Learn, Build, Earn, Repeat.",
-      icon: TrendingUp,
-      color: "from-green-400 to-emerald-500",
-      glow: "rgba(74,222,128,0.5)"
-    },
-    {
-      title: "SUCCESS",
-      desc: "Small actions today create massive results tomorrow.",
-      icon: Crown,
-      color: "from-blue-400 to-indigo-500",
-      glow: "rgba(96,165,250,0.5)"
     }
   ];
 
