@@ -607,7 +607,7 @@ function registerRoutes() {
   apiRouter.get("/crypto-market", async (req, res) => {
     try {
       const now = Date.now();
-      if (cryptoMarketCache && (now - cryptoMarketCache.time < 120000)) {
+      if (cryptoMarketCache && (now - cryptoMarketCache.time < 300000)) { // 5 minutes
          return res.json(cryptoMarketCache.data);
       }
       
