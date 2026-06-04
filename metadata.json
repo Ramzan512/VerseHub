@@ -1,0 +1,6 @@
+{
+  "name": "Verse AI Workspace",
+  "description": "A centralized platform to access multiple AI tools seamlessly in one unified workspace.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
