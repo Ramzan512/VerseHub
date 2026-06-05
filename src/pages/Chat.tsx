@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Bot, User, Send } from 'lucide-react';
+import { User, Send } from 'lucide-react';
 
 export default function Chat() {
-  const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([]);
+  const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([
+    { role: 'assistant', content: "Hi! I'm VerseHub AI.\nHow can I help you today?" }
+  ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -52,9 +54,11 @@ export default function Chat() {
           {messages.map((msg, i) => (
             <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-secondary/30 flex items-center justify-center shrink-0">
-                  <Bot className="w-4 h-4 text-secondary-foreground" />
-                </div>
+                <img 
+                  src="https://i.postimg.cc/mg6FZkJH/IMG-20260531-120027.png" 
+                  alt="Verse AI" 
+                  className="w-8 h-8 rounded-full object-contain shrink-0 shadow-[0_0_10px_rgba(0,191,255,0.4)] bg-black/50 border border-[#00BFFF]/30 p-1" 
+                />
               )}
               <div className={`p-3 rounded-lg max-w-[80%] ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                 <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
@@ -68,9 +72,11 @@ export default function Chat() {
           ))}
           {loading && (
             <div className="flex gap-3 justify-start">
-              <div className="w-8 h-8 rounded-full bg-secondary/30 flex items-center justify-center shrink-0">
-                <Bot className="w-4 h-4 text-secondary-foreground" />
-              </div>
+              <img 
+                src="https://i.postimg.cc/mg6FZkJH/IMG-20260531-120027.png" 
+                alt="Verse AI" 
+                className="w-8 h-8 rounded-full object-contain shrink-0 shadow-[0_0_10px_rgba(0,191,255,0.4)] bg-black/50 border border-[#00BFFF]/30 p-1 animate-pulse" 
+              />
               <div className="p-3 rounded-lg bg-muted flex items-center">
                 <div className="animate-pulse text-sm text-muted-foreground">Thinking...</div>
               </div>
