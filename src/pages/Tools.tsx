@@ -11,7 +11,7 @@ export default function Tools() {
     {
       name: 'Google AI Studio',
       url: 'https://aistudio.google.com',
-      description: 'Build production-ready AI applications quickly with Google Gemini models.',
+      description: 'Build production-ready AI applications quickly with Google AI models.',
       icon: Code2,
       category: 'AI Builder',
       color: 'text-blue-400',

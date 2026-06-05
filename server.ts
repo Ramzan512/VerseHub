@@ -2,7 +2,6 @@ import 'dotenv/config';
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 import Parser from "rss-parser";
 import cors from "cors";
 
@@ -15,16 +14,35 @@ app.use(cors());
 export const apiRouter = express.Router();
 app.use("/api", apiRouter);
 
-// Lazy init Gemini
-let ai: GoogleGenAI | null = null;
-const getAi = () => {
-  if (!ai) {
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error("GEMINI_API_KEY environment variable is missing.");
-    }
-    ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const callOpenRouter = async (systemInstruction: string, userMessage: string, forceJson: boolean = false) => {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("OPENROUTER_API_KEY_MISSING");
+
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "openai/gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemInstruction },
+        { role: "user", content: userMessage }
+      ],
+      ...(forceJson ? { response_format: { type: "json_object" } } : {})
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    if (response.status === 401) throw new Error("OPENROUTER_API_KEY_INVALID");
+    if (response.status === 429) throw new Error("QUOTA_EXHAUSTED");
+    throw new Error(`OpenRouter Error: ${response.status} ${errorText}`);
   }
-  return ai;
+
+  const data = await response.json();
+  return data.choices[0].message.content;
 };
 
 function registerRoutes() {
@@ -32,75 +50,44 @@ function registerRoutes() {
   apiRouter.post("/chat", async (req, res) => {
     try {
       const { messages } = req.body;
-      
-      if (!process.env.GEMINI_API_KEY) {
-        return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false });
-      }
-
-      const aiClient = getAi();
-      
       const inputMsg = messages[messages.length - 1].content;
       
       try {
-        const aiClient = getAi();
-        const response = await aiClient.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: inputMsg,
-          config: {
-            systemInstruction: "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers."
-          }
-        });
-        
-        let fullOutput = response.text || "No response received";
-        
-        res.json({ success: true, response: fullOutput });
+        const fullOutput = await callOpenRouter(
+          "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers.",
+          inputMsg
+        );
+        res.json({ success: true, response: fullOutput || "No response received" });
       } catch (innerError: any) {
         const exactError = innerError?.message || String(innerError);
-        const lowerError = exactError.toLowerCase();
         
-        if (lowerError.includes("429") || lowerError.includes("quota")) {
+        if (exactError === "QUOTA_EXHAUSTED") {
           return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
-        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
+        } else if (exactError === "OPENROUTER_API_KEY_INVALID" || exactError === "OPENROUTER_API_KEY_MISSING") {
+          return res.status(401).json({ error: "OPENROUTER_API_KEY_INVALID", success: false, message: "The OpenRouter API Key configured in your settings is invalid or missing." });
         }
 
         console.error("[Chat API Error Debug]:", innerError);
-        return res.status(500).json({ 
-          success: false, 
-          error: "API_ERROR",
-          message: exactError
-        });
+        return res.status(500).json({ success: false, error: "API_ERROR", message: exactError });
       }
     } catch (error: any) {
       console.error("[Chat Config Error Debug]:", error);
-      res.status(500).json({ 
-        success: false, 
-        error: "CONFIG_ERROR",
-        message: error?.message || String(error) 
-      });
+      res.status(500).json({ success: false, error: "CONFIG_ERROR", message: error?.message || String(error) });
     }
   });
 
   apiRouter.post("/detect", async (req, res) => {
     try {
       const { text } = req.body;
-      if (!process.env.GEMINI_API_KEY) {
-        return res.status(401).json({ error: "GEMINI_API_KEY_MISSING" });
-      }
-
-      const aiClient = getAi();
       
       try {
-        const response = await aiClient.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: text,
-          config: {
-            systemInstruction: "You are an AI text detector. Analyze the input text and return ONLY a JSON object with 'score' (a number 0-100 indicating probability of AI generation) and 'analysis' (a short 2 sentence explanation of why)."
-          }
-        });
+        let fullOutput = await callOpenRouter(
+          "You are an AI text detector. Analyze the input text and return ONLY a JSON object with 'score' (a number 0-100 indicating probability of AI generation) and 'analysis' (a short 2 sentence explanation of why).",
+          text,
+          true
+        );
         
-        let fullOutput = response.text || "";
-        
+        fullOutput = fullOutput || "";
         let parsed = { score: Math.floor(Math.random() * 100), analysis: "Could not parse analysis properly." };
         const jsonMatch = fullOutput.match(/```json\s*([\s\S]*?)\s*```/) || fullOutput.match(/([\{\[][\s\S]*[\}\]])/);
         if (jsonMatch) {
@@ -112,114 +99,78 @@ function registerRoutes() {
         res.json(parsed);
       } catch (innerError: any) {
         const exactError = innerError?.message || String(innerError);
-        const lowerError = exactError.toLowerCase();
         
-        if (lowerError.includes("429") || lowerError.includes("quota")) {
+        if (exactError === "QUOTA_EXHAUSTED") {
           return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
-        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
+        } else if (exactError === "OPENROUTER_API_KEY_INVALID" || exactError === "OPENROUTER_API_KEY_MISSING") {
+          return res.status(401).json({ error: "OPENROUTER_API_KEY_INVALID", success: false, message: "The OpenRouter API Key configured in your settings is invalid or missing." });
         }
         
         console.error("[Detect API Error Debug]:", innerError);
-        return res.status(500).json({ 
-          success: false, 
-          error: "API_ERROR",
-          message: exactError
-        });
+        return res.status(500).json({ success: false, error: "API_ERROR", message: exactError });
       }
     } catch (error: any) {
       console.error("[Detect Config Error Debug]:", error);
-      res.status(500).json({ 
-        success: false, 
-        error: "CONFIG_ERROR",
-        message: error?.message || String(error) 
-      });
+      res.status(500).json({ success: false, error: "CONFIG_ERROR", message: error?.message || String(error) });
     }
   });
 
   apiRouter.post("/humanize", async (req, res) => {
     try {
       const { text, style } = req.body;
-      if (!process.env.GEMINI_API_KEY) {
-        return res.status(401).json({ error: "GEMINI_API_KEY_MISSING" });
-      }
-
-      const aiClient = getAi();
       
       try {
-        const response = await aiClient.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: text,
-          config: {
-            systemInstruction: `You are an expert humanizer and rewrite assistant. Rewrite the following text to sound incredibly natural, human-written, and engaging in the following style: ${style}. Return the raw text nothing else.`
-          }
-        });
+        const fullOutput = await callOpenRouter(
+          `You are an expert humanizer and rewrite assistant. Rewrite the following text to sound incredibly natural, human-written, and engaging in the following style: ${style}. Return the raw text nothing else.`,
+          text
+        );
         
-        let fullOutput = response.text || "";
-        
-        res.json({ result: fullOutput });
+        res.json({ result: fullOutput || "" });
       } catch (innerError: any) {
         const exactError = innerError?.message || String(innerError);
-        const lowerError = exactError.toLowerCase();
         
-        if (lowerError.includes("429") || lowerError.includes("quota")) {
+        if (exactError === "QUOTA_EXHAUSTED") {
           return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
-        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
+        } else if (exactError === "OPENROUTER_API_KEY_INVALID" || exactError === "OPENROUTER_API_KEY_MISSING") {
+          return res.status(401).json({ error: "OPENROUTER_API_KEY_INVALID", success: false, message: "The OpenRouter API Key configured in your settings is invalid or missing." });
         }
 
         console.error("[Humanize API Error Debug]:", innerError);
-        return res.status(500).json({ 
-          success: false, 
-          error: "API_ERROR",
-          message: exactError
-        });
+        return res.status(500).json({ success: false, error: "API_ERROR", message: exactError });
       }
     } catch (error: any) {
       console.error("[Humanize Config Error Debug]:", error);
-      res.status(500).json({ 
-        success: false, 
-        error: "CONFIG_ERROR",
-        message: error?.message || String(error)
-      });
+      res.status(500).json({ success: false, error: "CONFIG_ERROR", message: error?.message || String(error) });
     }
   });
 
   apiRouter.get("/admin/status", async (req, res) => {
     try {
-      if (!process.env.GEMINI_API_KEY) {
-        return res.json({ provider: "Gemini", model: "gemini-2.0-flash", apiKeyExists: false, quotaStatus: "Unknown", apiResponse: "GEMINI_API_KEY is missing." });
+      if (!process.env.OPENROUTER_API_KEY) {
+        return res.json({ provider: "OpenRouter", model: "openai/gpt-4o-mini", apiKeyExists: false, quotaStatus: "Unknown", apiResponse: "OPENROUTER_API_KEY is missing." });
       }
       
-      const aiClient = getAi();
       let quotaStatus = "Available";
       let apiResponse = "OK. API connection successful.";
       
       try {
-        await aiClient.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: "ping",
-          config: {
-            systemInstruction: "ping"
-          }
-        });
+        await callOpenRouter("ping", "ping");
       } catch (innerError: any) {
         const exactError = innerError?.message || String(innerError);
-        const lowerError = exactError.toLowerCase();
         
-        if (lowerError.includes("429") || lowerError.includes("quota")) {
+        if (exactError === "QUOTA_EXHAUSTED") {
           quotaStatus = "Exhausted";
           apiResponse = "Rate limit reached or quota exhausted.";
-        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
+        } else if (exactError === "OPENROUTER_API_KEY_INVALID" || exactError === "OPENROUTER_API_KEY_MISSING") {
           quotaStatus = "Invalid API Key";
-          apiResponse = "The configured Gemini API Key is invalid or has expired.";
+          apiResponse = "The configured OpenRouter API Key is invalid or has expired.";
         } else {
-          quotaStatus = `Error: ${exactError}`;
+          quotaStatus = `Error`;
           apiResponse = exactError;
         }
       }
 
-      res.json({ provider: "Gemini", model: "gemini-2.0-flash", apiKeyExists: true, quotaStatus, apiResponse });
+      res.json({ provider: "OpenRouter", model: "openai/gpt-4o-mini", apiKeyExists: true, quotaStatus, apiResponse });
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }

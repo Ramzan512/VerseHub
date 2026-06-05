@@ -31,8 +31,8 @@ export default function Detector() {
     } catch(e: any) {
       // console.warn(e);
       let errorMsg = e.message;
-      if (errorMsg.includes("GEMINI_API_KEY")) {
-        errorMsg = "It looks like your Gemini API key is missing. Please add your GEMINI_API_KEY in the AI Studio settings.";
+      if (errorMsg.includes("OPENROUTER_API_KEY") || errorMsg.includes("GEMINI_API_KEY")) {
+        errorMsg = "It looks like your OpenRouter API key is missing. Please add your OPENROUTER_API_KEY in the environment settings.";
       }
       setError(errorMsg);
     }

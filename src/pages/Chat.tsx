@@ -67,16 +67,16 @@ export default function Chat() {
             <div>
               <h2 className="text-2xl font-bold mb-2">API Key Required</h2>
               <p className="text-muted-foreground text-lg">
-                To use the AI Chat, you need to configure your Gemini API Key.
+                To use the AI Chat, you need to configure your OpenRouter API Key.
               </p>
             </div>
             
             <div className="bg-background/80 p-6 rounded-xl border border-white/10 w-full text-left space-y-4">
               <p className="font-medium text-sm text-muted-foreground uppercase tracking-widest">Setup Instructions</p>
               <ol className="list-decimal list-inside space-y-3 text-sm">
-                <li>Go to Google AI Studio to get your API key.</li>
+                <li>Go to OpenRouter.ai to get your API key.</li>
                 <li>Open your AI agent settings or environment variables panel.</li>
-                <li>Add a new variable named <code className="bg-muted px-1.5 py-0.5 rounded text-amber-400">GEMINI_API_KEY</code></li>
+                <li>Add a new variable named <code className="bg-muted px-1.5 py-0.5 rounded text-amber-400">OPENROUTER_API_KEY</code></li>
                 <li>Paste your API key as the value.</li>
                 <li>Restart the server.</li>
               </ol>
@@ -96,17 +96,17 @@ export default function Chat() {
       <div className="mb-6 flex items-end justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold">AI Chat</h1>
-          <p className="text-muted-foreground">Powered by Gemini for advanced reasoning.</p>
+          <p className="text-muted-foreground">Powered by OpenRouter API.</p>
         </div>
         
         {/* Debug Panel */}
         <div className="flex items-center gap-3 bg-card border border-white/10 rounded-full px-4 py-1.5 text-xs text-muted-foreground shadow-sm">
           <div className="flex items-center gap-1.5 text-amber-400 font-medium">
-             <Activity className="w-3.5 h-3.5" /> Provider: Gemini
+             <Activity className="w-3.5 h-3.5" /> Provider: OpenRouter
           </div>
           <div className="w-px h-3 bg-white/20" />
           <div className="flex items-center gap-1.5 text-cyan-400 font-medium">
-             <Zap className="w-3.5 h-3.5" /> Model: gemini-2.5-flash
+             <Zap className="w-3.5 h-3.5" /> Model: gpt-4o-mini
           </div>
         </div>
       </div>
