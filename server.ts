@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import express from "express";
 import path from "path";
-import { fileURLToPath } from 'url';
 // import { createServer as createViteServer } from "vite";
 import Parser from "rss-parser";
 import cors from "cors";
@@ -1009,8 +1008,7 @@ async function startViteAndListen() {
 }
 
 // Ensure the server only binds to port if ran directly, avoiding Vercel serverless clash
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
-if (isMainModule || !process.env.VERCEL) {
+if (!process.env.VERCEL) {
   startViteAndListen();
 }
 
