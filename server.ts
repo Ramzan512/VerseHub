@@ -50,30 +50,40 @@ function registerRoutes() {
 
   apiRouter.post("/chat", async (req, res) => {
     try {
-      const { messages } = req.body;
-      const inputMsg = messages[messages.length - 1].content;
-      
-      try {
-        const fullOutput = await callOpenRouter(
-          "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers.",
-          inputMsg
-        );
-        res.json({ success: true, response: fullOutput || "No response received" });
-      } catch (innerError: any) {
-        const exactError = innerError?.message || String(innerError);
-        
-        if (exactError === "QUOTA_EXHAUSTED") {
-          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
-        } else if (exactError === "OPENROUTER_API_KEY_INVALID" || exactError === "OPENROUTER_API_KEY_MISSING") {
-          return res.status(401).json({ error: "OPENROUTER_API_KEY_INVALID", success: false, message: "The OpenRouter API Key configured in your settings is invalid or missing." });
-        }
-
-        console.error("[Chat API Error Debug]:", innerError);
-        return res.status(500).json({ success: false, error: "API_ERROR", message: exactError });
+      const { message } = req.body;
+      const apiKey = process.env.OPENROUTER_API_KEY;
+      if (!apiKey) {
+        return res.status(401).send("OPENROUTER_API_KEY is missing in environment variables.");
       }
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-4o-mini",
+          messages: [
+            { role: "system", content: "You are a helpful AI assistant." },
+            { role: "user", content: message }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return res.status(response.status).send(`OpenRouter API Error: ${errorText}`);
+      }
+
+      const data = await response.json();
+      const aiMessage = data.choices?.[0]?.message?.content || "No response received.";
+      
+      res.type('text/plain');
+      res.send(aiMessage);
     } catch (error: any) {
-      console.error("[Chat Config Error Debug]:", error);
-      res.status(500).json({ success: false, error: "CONFIG_ERROR", message: error?.message || String(error) });
+      console.error("[Chat Error]:", error);
+      res.status(500).send(`Server Error: ${error.message}`);
     }
   });
 
