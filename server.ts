@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -41,8 +42,9 @@ function registerRoutes() {
       const inputMsg = messages[messages.length - 1].content;
       
       try {
+        const aiClient = getAi();
         const response = await aiClient.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-2.0-flash",
           contents: inputMsg,
           config: {
             systemInstruction: "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers."
@@ -53,20 +55,29 @@ function registerRoutes() {
         
         res.json({ success: true, response: fullOutput });
       } catch (innerError: any) {
-        console.error("[Chat API Error]:", innerError);
-        const errorMessage = innerError?.message?.toLowerCase() || "";
-        if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable" });
-        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
-        }
+        const exactError = innerError?.message || String(innerError);
+        const lowerError = exactError.toLowerCase();
         
-        // Return structured failure response instead of plain text or raw errors
-        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+        if (lowerError.includes("429") || lowerError.includes("quota")) {
+          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
+        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
+        }
+
+        console.error("[Chat API Error Debug]:", innerError);
+        return res.status(500).json({ 
+          success: false, 
+          error: "API_ERROR",
+          message: exactError
+        });
       }
     } catch (error: any) {
-      console.error("[Chat Config Error]:", error);
-      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+      console.error("[Chat Config Error Debug]:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "CONFIG_ERROR",
+        message: error?.message || String(error) 
+      });
     }
   });
 
@@ -81,7 +92,7 @@ function registerRoutes() {
       
       try {
         const response = await aiClient.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-2.0-flash",
           contents: text,
           config: {
             systemInstruction: "You are an AI text detector. Analyze the input text and return ONLY a JSON object with 'score' (a number 0-100 indicating probability of AI generation) and 'analysis' (a short 2 sentence explanation of why)."
@@ -100,18 +111,29 @@ function registerRoutes() {
         
         res.json(parsed);
       } catch (innerError: any) {
-        console.error("[Detect API Error]:", innerError);
-        const errorMessage = innerError?.message?.toLowerCase() || "";
-        if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ success: false, message: "AI service temporarily unavailable" });
-        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
+        const exactError = innerError?.message || String(innerError);
+        const lowerError = exactError.toLowerCase();
+        
+        if (lowerError.includes("429") || lowerError.includes("quota")) {
+          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
+        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
         }
-        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+        
+        console.error("[Detect API Error Debug]:", innerError);
+        return res.status(500).json({ 
+          success: false, 
+          error: "API_ERROR",
+          message: exactError
+        });
       }
     } catch (error: any) {
-      console.error("[Detect Config Error]:", error);
-      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+      console.error("[Detect Config Error Debug]:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "CONFIG_ERROR",
+        message: error?.message || String(error) 
+      });
     }
   });
 
@@ -126,7 +148,7 @@ function registerRoutes() {
       
       try {
         const response = await aiClient.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-2.0-flash",
           contents: text,
           config: {
             systemInstruction: `You are an expert humanizer and rewrite assistant. Rewrite the following text to sound incredibly natural, human-written, and engaging in the following style: ${style}. Return the raw text nothing else.`
@@ -137,25 +159,36 @@ function registerRoutes() {
         
         res.json({ result: fullOutput });
       } catch (innerError: any) {
-        console.error("[Humanize API Error]:", innerError);
-        const errorMessage = innerError?.message?.toLowerCase() || "";
-        if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ success: false, message: "AI service temporarily unavailable" });
-        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
-          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
+        const exactError = innerError?.message || String(innerError);
+        const lowerError = exactError.toLowerCase();
+        
+        if (lowerError.includes("429") || lowerError.includes("quota")) {
+          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable - Quota Exhausted" });
+        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_INVALID", success: false, message: "The Gemini API Key configured in your settings is invalid or has expired." });
         }
-        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+
+        console.error("[Humanize API Error Debug]:", innerError);
+        return res.status(500).json({ 
+          success: false, 
+          error: "API_ERROR",
+          message: exactError
+        });
       }
     } catch (error: any) {
-      console.error("[Humanize Config Error]:", error);
-      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
+      console.error("[Humanize Config Error Debug]:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "CONFIG_ERROR",
+        message: error?.message || String(error)
+      });
     }
   });
 
   apiRouter.get("/admin/status", async (req, res) => {
     try {
       if (!process.env.GEMINI_API_KEY) {
-        return res.json({ provider: "Gemini", model: "gemini-2.5-flash", apiKeyExists: false, quotaStatus: "Unknown", apiResponse: "GEMINI_API_KEY is missing." });
+        return res.json({ provider: "Gemini", model: "gemini-2.0-flash", apiKeyExists: false, quotaStatus: "Unknown", apiResponse: "GEMINI_API_KEY is missing." });
       }
       
       const aiClient = getAi();
@@ -164,23 +197,29 @@ function registerRoutes() {
       
       try {
         await aiClient.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-2.0-flash",
           contents: "ping",
           config: {
             systemInstruction: "ping"
           }
         });
       } catch (innerError: any) {
-        apiResponse = innerError.message || JSON.stringify(innerError);
-        const errorMessage = innerError?.message?.toLowerCase() || "";
-        if (errorMessage.includes("429") || errorMessage.includes("quota")) {
+        const exactError = innerError?.message || String(innerError);
+        const lowerError = exactError.toLowerCase();
+        
+        if (lowerError.includes("429") || lowerError.includes("quota")) {
           quotaStatus = "Exhausted";
+          apiResponse = "Rate limit reached or quota exhausted.";
+        } else if (lowerError.includes("401") || lowerError.includes("unauthenticated") || lowerError.includes("invalid authentication credentials") || lowerError.includes("api key not valid")) {
+          quotaStatus = "Invalid API Key";
+          apiResponse = "The configured Gemini API Key is invalid or has expired.";
         } else {
-          quotaStatus = "Error: " + innerError.message;
+          quotaStatus = `Error: ${exactError}`;
+          apiResponse = exactError;
         }
       }
 
-      res.json({ provider: "Gemini", model: "gemini-2.5-flash", apiKeyExists: true, quotaStatus, apiResponse });
+      res.json({ provider: "Gemini", model: "gemini-2.0-flash", apiKeyExists: true, quotaStatus, apiResponse });
     } catch (e: any) {
       res.status(500).json({ error: e.message });
     }

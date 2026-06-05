@@ -33,9 +33,8 @@ export default function Chat() {
       let data;
       try {
         data = await res.json();
-      } catch (parseError) {
-        // If the server returns HTML or plain text (e.g., Vercel 500 error page)
-        throw new Error('AI service temporarily unavailable (Invalid server response)');
+      } catch (parseError: any) {
+        throw new Error(`Failed to parse JSON response: ${parseError.message || parseError}`);
       }
       
       if (res.ok && data.success !== false) {
@@ -47,7 +46,7 @@ export default function Chat() {
         } else if (data.error === "QUOTA_EXHAUSTED") {
           setMessages(prev => [...prev, { role: 'assistant', content: "It looks like we've hit our usage limits for now. Please try again a bit later when the quota resets!" }]);
         } else {
-          setMessages(prev => [...prev, { role: 'assistant', content: data.message || `Error: ${data.error || 'AI service temporarily unavailable'}` }]);
+          setMessages(prev => [...prev, { role: 'assistant', content: data.message || `Error: ${data.error || 'Unknown error occurred'}` }]);
         }
       }
     } catch(e: any) {
