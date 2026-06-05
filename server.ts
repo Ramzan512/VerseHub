@@ -7,6 +7,10 @@ import cors from "cors";
 
 // Export the app for Vercel Serverless Functions
 export const app = express();
+app.use((req: any, res, next) => {
+  if (req.body) req._body = true;
+  next();
+});
 app.use(express.json());
 app.use(cors());
 
