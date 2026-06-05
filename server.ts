@@ -33,7 +33,7 @@ function registerRoutes() {
       const { messages } = req.body;
       
       if (!process.env.GEMINI_API_KEY) {
-        return res.status(401).json({ error: "GEMINI_API_KEY_MISSING" });
+        return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false });
       }
 
       const aiClient = getAi();
@@ -50,25 +50,25 @@ function registerRoutes() {
         let fullOutput = "";
         for (const step of interaction.steps) {
           if (step.type === 'model_output') {
-            const textContent = step.content?.find(c => c.type === 'text');
+            const textContent = step.content?.find((c: any) => c.type === 'text');
             if (textContent && textContent.text) fullOutput += textContent.text;
           }
         }
         
-        res.json({ response: fullOutput });
+        res.json({ success: true, response: fullOutput });
       } catch (innerError: any) {
         console.error("[Chat API Error]:", innerError);
         const errorMessage = innerError?.message?.toLowerCase() || "";
         if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ error: "QUOTA_EXHAUSTED" });
+          return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable" });
         }
         
-        // Fallback demo response
-        res.json({ response: "This is a simulated fallback response because the AI model is currently unavailable or encountered an error. Please try again later.", fallback: true });
+        // Return structured failure response instead of plain text or raw errors
+        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
       }
     } catch (error: any) {
       console.error("[Chat Config Error]:", error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
     }
   });
 

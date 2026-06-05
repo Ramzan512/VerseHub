@@ -29,17 +29,25 @@ export default function Chat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: [...messages, userMsg] })
       });
-      const data = await res.json();
       
-      if (res.ok) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseError) {
+        // If the server returns HTML or plain text (e.g., Vercel 500 error page)
+        throw new Error('AI service temporarily unavailable (Invalid server response)');
+      }
+      
+      if (res.ok && data.success !== false) {
+        // Use data.response if available, otherwise check data.message
+        setMessages(prev => [...prev, { role: 'assistant', content: data.response || "No response received." }]);
       } else {
         if (data.error === "GEMINI_API_KEY_MISSING") {
           setNeedsSetup(true);
         } else if (data.error === "QUOTA_EXHAUSTED") {
           setMessages(prev => [...prev, { role: 'assistant', content: "It looks like we've hit our usage limits for now. Please try again a bit later when the quota resets!" }]);
         } else {
-          setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${data.error}` }]);
+          setMessages(prev => [...prev, { role: 'assistant', content: data.message || `Error: ${data.error || 'AI service temporarily unavailable'}` }]);
         }
       }
     } catch(e: any) {
