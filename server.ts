@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
+import { fileURLToPath } from 'url';
+// import { createServer as createViteServer } from "vite";
 import Parser from "rss-parser";
 import cors from "cors";
 
@@ -977,7 +978,9 @@ async function startViteAndListen() {
   const PORT = 3000;
 
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
+    // Hide Vite import from Vercel's static analyzer
+    const viteMod = await new Function("return import('vite')")();
+    const vite = await viteMod.createServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
@@ -995,5 +998,10 @@ async function startViteAndListen() {
   });
 }
 
-startViteAndListen();
+// Ensure the server only binds to port if ran directly, avoiding Vercel serverless clash
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule || !process.env.VERCEL) {
+  startViteAndListen();
+}
+
 export default app;
