@@ -41,19 +41,15 @@ function registerRoutes() {
       const inputMsg = messages[messages.length - 1].content;
       
       try {
-        const interaction = await aiClient.interactions.create({
+        const response = await aiClient.models.generateContent({
           model: "gemini-2.5-flash",
-          system_instruction: "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers.",
-          input: inputMsg
+          contents: inputMsg,
+          config: {
+            systemInstruction: "You are a helpful AI assistant for Verse AI Hub. Provide concise, helpful answers."
+          }
         });
         
-        let fullOutput = "";
-        for (const step of interaction.steps) {
-          if (step.type === 'model_output') {
-            const textContent = step.content?.find((c: any) => c.type === 'text');
-            if (textContent && textContent.text) fullOutput += textContent.text;
-          }
-        }
+        let fullOutput = response.text || "No response received";
         
         res.json({ success: true, response: fullOutput });
       } catch (innerError: any) {
@@ -61,6 +57,8 @@ function registerRoutes() {
         const errorMessage = innerError?.message?.toLowerCase() || "";
         if (errorMessage.includes("429") || errorMessage.includes("quota")) {
           return res.status(429).json({ error: "QUOTA_EXHAUSTED", success: false, message: "AI service temporarily unavailable" });
+        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
         }
         
         // Return structured failure response instead of plain text or raw errors
@@ -82,19 +80,15 @@ function registerRoutes() {
       const aiClient = getAi();
       
       try {
-        const interaction = await aiClient.interactions.create({
+        const response = await aiClient.models.generateContent({
           model: "gemini-2.5-flash",
-          system_instruction: "You are an AI text detector. Analyze the input text and return ONLY a JSON object with 'score' (a number 0-100 indicating probability of AI generation) and 'analysis' (a short 2 sentence explanation of why).",
-          input: text
+          contents: text,
+          config: {
+            systemInstruction: "You are an AI text detector. Analyze the input text and return ONLY a JSON object with 'score' (a number 0-100 indicating probability of AI generation) and 'analysis' (a short 2 sentence explanation of why)."
+          }
         });
         
-        let fullOutput = "";
-        for (const step of interaction.steps) {
-          if (step.type === 'model_output') {
-            const textContent = step.content?.find(c => c.type === 'text');
-            if (textContent && textContent.text) fullOutput += textContent.text;
-          }
-        }
+        let fullOutput = response.text || "";
         
         let parsed = { score: Math.floor(Math.random() * 100), analysis: "Could not parse analysis properly." };
         const jsonMatch = fullOutput.match(/```json\s*([\s\S]*?)\s*```/) || fullOutput.match(/([\{\[][\s\S]*[\}\]])/);
@@ -109,13 +103,15 @@ function registerRoutes() {
         console.error("[Detect API Error]:", innerError);
         const errorMessage = innerError?.message?.toLowerCase() || "";
         if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ error: "QUOTA_EXHAUSTED" });
+          return res.status(429).json({ success: false, message: "AI service temporarily unavailable" });
+        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
         }
-        res.json({ score: 50, analysis: "This is a simulated fallback analysis because the AI model is currently unavailable.", fallback: true });
+        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
       }
     } catch (error: any) {
       console.error("[Detect Config Error]:", error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
     }
   });
 
@@ -129,32 +125,30 @@ function registerRoutes() {
       const aiClient = getAi();
       
       try {
-        const interaction = await aiClient.interactions.create({
+        const response = await aiClient.models.generateContent({
           model: "gemini-2.5-flash",
-          system_instruction: `You are an expert humanizer and rewrite assistant. Rewrite the following text to sound incredibly natural, human-written, and engaging in the following style: ${style}. Return the raw text nothing else.`,
-          input: text
+          contents: text,
+          config: {
+            systemInstruction: `You are an expert humanizer and rewrite assistant. Rewrite the following text to sound incredibly natural, human-written, and engaging in the following style: ${style}. Return the raw text nothing else.`
+          }
         });
         
-        let fullOutput = "";
-        for (const step of interaction.steps) {
-          if (step.type === 'model_output') {
-            const textContent = step.content?.find(c => c.type === 'text');
-            if (textContent && textContent.text) fullOutput += textContent.text;
-          }
-        }
+        let fullOutput = response.text || "";
         
         res.json({ result: fullOutput });
       } catch (innerError: any) {
         console.error("[Humanize API Error]:", innerError);
         const errorMessage = innerError?.message?.toLowerCase() || "";
         if (errorMessage.includes("429") || errorMessage.includes("quota")) {
-          return res.status(429).json({ error: "QUOTA_EXHAUSTED" });
+          return res.status(429).json({ success: false, message: "AI service temporarily unavailable" });
+        } else if (errorMessage.includes("401") || errorMessage.includes("unauthenticated") || errorMessage.includes("invalid authentication credentials")) {
+          return res.status(401).json({ error: "GEMINI_API_KEY_MISSING", success: false, message: "Invalid or missing GEMINI_API_KEY" });
         }
-        res.json({ result: "This is a simulated fallback response because the AI model is currently unavailable.", fallback: true });
+        return res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
       }
     } catch (error: any) {
       console.error("[Humanize Config Error]:", error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, message: "AI service temporarily unavailable" });
     }
   });
 
@@ -169,10 +163,12 @@ function registerRoutes() {
       let apiResponse = "OK. API connection successful.";
       
       try {
-        await aiClient.interactions.create({
+        await aiClient.models.generateContent({
           model: "gemini-2.5-flash",
-          system_instruction: "ping",
-          input: "ping"
+          contents: "ping",
+          config: {
+            systemInstruction: "ping"
+          }
         });
       } catch (innerError: any) {
         apiResponse = innerError.message || JSON.stringify(innerError);

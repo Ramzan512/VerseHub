@@ -24,8 +24,8 @@ export default function Detector() {
         body: JSON.stringify({ text })
       });
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to analyze text");
+      if (!res.ok || data.success === false) {
+        throw new Error(data.message || data.error || "Failed to analyze text");
       }
       setResult(data);
     } catch(e: any) {

@@ -26,8 +26,8 @@ export default function Humanizer() {
         body: JSON.stringify({ text, style })
       });
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to humanize text");
+      if (!res.ok || data.success === false) {
+        throw new Error(data.message || data.error || "Failed to humanize text");
       }
       setResult(data.result);
     } catch(e: any) {
