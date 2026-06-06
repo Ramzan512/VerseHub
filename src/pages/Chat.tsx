@@ -3,6 +3,7 @@ import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { User, Send } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 
 export default function Chat() {
   const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([
@@ -10,12 +11,18 @@ export default function Chat() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([
+    "🚀 What is Verse?",
+    "📈 Latest Crypto Market Update",
+    "📰 Today's Top Crypto News",
+    "🎓 Teach Me Web3 Basics"
+  ]);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || loading) return;
+  const handleSend = async (userText: string) => {
+    if (!userText.trim() || loading) return;
 
-    const userText = input.trim();
+    trackEvent('AI Chat Message Sent', { message_length: userText.length.toString() });
+
     setMessages(prev => [...prev, { role: 'user', content: userText }]);
     setInput('');
     setLoading(true);
@@ -36,6 +43,12 @@ export default function Chat() {
     
     setLoading(false);
   };
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSend(input);
+  };
+
 
   return (
     <div className="h-full flex flex-col p-4 max-w-3xl mx-auto space-y-4">
@@ -79,6 +92,37 @@ export default function Chat() {
               />
               <div className="p-3 rounded-lg bg-muted flex items-center">
                 <div className="animate-pulse text-sm text-muted-foreground">Thinking...</div>
+              </div>
+            </div>
+          )}
+          
+          {suggestions.length > 0 && (
+            <div className="mt-8 pt-4 mb-2">
+              <div className="flex items-center justify-between mb-3 px-1">
+                <span className="text-xs text-white/50 font-bold uppercase tracking-widest">Suggested For You</span>
+                <button 
+                  type="button" 
+                  onClick={() => setSuggestions([])} 
+                  className="text-white/40 hover:text-white text-xs px-2 py-1 transition-colors rounded-md hover:bg-white/5"
+                >
+                  Dismiss
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map((action, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      trackEvent('Quick Action Clicked', { button: action });
+                      handleSend(action);
+                      setSuggestions(prev => prev.filter(s => s !== action));
+                    }}
+                    className="text-left flex-1 min-w-[240px] bg-gradient-to-r from-secondary/40 to-secondary/20 hover:from-[#00BFFF]/20 hover:to-[#00FF88]/10 border border-white/10 hover:border-[#00BFFF]/50 text-white rounded-xl p-3 md:p-4 text-[13px] md:text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(0,191,255,0.2)] hover:-translate-y-0.5 group"
+                  >
+                    <span className="group-hover:scale-105 inline-block transition-transform duration-300">{action}</span>
+                  </button>
+                ))}
               </div>
             </div>
           )}

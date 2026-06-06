@@ -22,6 +22,7 @@ import { FootballWidget } from "../components/home/FootballWidget";
 import { VerseEcosystem } from "../components/home/VerseEcosystem";
 import { VerseMindset } from "../components/home/VerseMindset";
 import { AboutVerse } from "../components/home/AboutVerse";
+import { trackEvent } from "../lib/analytics";
 
 export default function Home() {
   const [adminAlert, setAdminAlert] = useState("");
@@ -193,6 +194,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 className="h-full"
+                onClick={() => trackEvent('Homepage Tool Clicked', { tool: tool.title })}
               >
                 <CardWrap {...(linkProps as any)}>
                   <Card

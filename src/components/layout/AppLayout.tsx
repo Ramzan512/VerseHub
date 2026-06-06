@@ -3,11 +3,14 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Menu, ArrowLeft } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Footer } from './Footer';
+import { trackEvent } from '../../lib/analytics';
 
 export default function AppLayout() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const sessionStartTime = useRef<number>(Date.now());
+  const maxScrollDepth = useRef<number>(0);
   
   const navItems = [
     { name: 'Home', path: '/' },
@@ -18,6 +21,40 @@ export default function AppLayout() {
     { name: 'Events Hub', path: 'https://t.me/GetVerse/379189', isExternal: true },
     { name: 'Admin Panel', path: '/admin' },
   ];
+
+  // Session & Scroll tracking
+  useEffect(() => {
+    // Reset session timer on mount for SPA layout
+    sessionStartTime.current = Date.now();
+    maxScrollDepth.current = 0;
+
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      if (documentHeight > 0) {
+        const scrollPercentage = Math.round((scrollTop / documentHeight) * 100);
+        
+        if (scrollPercentage > maxScrollDepth.current) {
+          maxScrollDepth.current = scrollPercentage;
+          
+          // Track specific milestones
+          if ([25, 50, 75, 90, 100].includes(scrollPercentage)) {
+             trackEvent('Scroll Depth Milestone', { depth: `${scrollPercentage}%` });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      const sessionDuration = Math.round((Date.now() - sessionStartTime.current) / 1000); // seconds
+      trackEvent('Session Ended', { duration_seconds: sessionDuration.toString() });
+    };
+  }, [location.pathname]);
 
   // Close menu when clicking outside
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'motion/react';
 import { Clock, Share2, Bookmark, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft, Brain, Sparkles, Zap, MessageSquare } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 
 interface NewsItem {
   id?: string;
@@ -30,6 +31,10 @@ export function NewsReader() {
     // Scroll to top on load/change
     window.scrollTo(0, 0);
 
+    if (article) {
+      trackEvent('Article Viewed', { headline: article.headline, source: article.source });
+    }
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -38,7 +43,10 @@ export function NewsReader() {
           setAllNews(res.data.news);
           const foundId = decodeURIComponent(id || '');
           const found = res.data.news.find((n: any) => n.id === foundId || n.headline === foundId);
-          if (found) setArticle(found);
+          if (found) {
+             setArticle(found);
+             trackEvent('Article Viewed', { headline: found.headline, source: found.source });
+          }
         }
       } catch (error) {
         // console.warn(error);
@@ -58,6 +66,7 @@ export function NewsReader() {
        const found = allNews.find(n => n.id === foundId || n.headline === foundId);
        if (found) {
            setArticle(found);
+           trackEvent('Article Viewed', { headline: found.headline, source: found.source });
        }
     }
   }, [id, navigate]); // Removed dependencies to avoid infinite loops, we handle it on id change
@@ -118,12 +127,14 @@ export function NewsReader() {
           <div className="flex items-center gap-3">
             <button 
                title="Share News"
+               onClick={() => trackEvent('Article Shared', { headline: article.headline })}
                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               <Share2 className="w-[18px] h-[18px]" />
             </button>
             <button 
                title="Save News"
+               onClick={() => trackEvent('Article Saved', { headline: article.headline })}
                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-[0_0_15px_rgba(168,85,247,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               <Bookmark className="w-[18px] h-[18px]" />
@@ -233,6 +244,7 @@ export function NewsReader() {
               href={article.link} 
               target="_blank" 
               rel="noopener noreferrer"
+              onClick={() => trackEvent('Read Original Article', { headline: article.headline, source: article.source })}
               className="inline-flex items-center justify-center gap-2 text-sm font-black text-[#050816] bg-white hover:bg-gray-200 px-8 py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:-translate-y-1 group tracking-widest uppercase"
            >
               Read Original Article <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -245,6 +257,7 @@ export function NewsReader() {
               <Link 
                  to={`/news/${encodeURIComponent(prevArticle.id || prevArticle.headline)}`}
                  state={{ article: prevArticle, newsList: allNews }}
+                 onClick={() => trackEvent('Previous Story Clicked', { current_headline: article.headline, new_headline: prevArticle.headline })}
                  className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group text-left"
               >
                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
@@ -261,6 +274,7 @@ export function NewsReader() {
               <Link 
                  to={`/news/${encodeURIComponent(nextArticle.id || nextArticle.headline)}`}
                  state={{ article: nextArticle, newsList: allNews }}
+                 onClick={() => trackEvent('Next Story Clicked', { current_headline: article.headline, new_headline: nextArticle.headline })}
                  className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group text-right justify-end"
               >
                  <div className="flex-1 min-w-0">
@@ -286,6 +300,7 @@ export function NewsReader() {
                           key={rel.id || idx}
                           to={`/news/${encodeURIComponent(rel.id || rel.headline)}`}
                           state={{ article: rel, newsList: allNews }}
+                          onClick={() => trackEvent('Related Article Clicked', { current_headline: article.headline, next_headline: rel.headline })}
                           className="group flex flex-col bg-[#0A1020] border border-white/5 hover:border-cyan-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1"
                        >
                           <div className="h-32 w-full bg-black/50 overflow-hidden relative">
@@ -313,6 +328,43 @@ export function NewsReader() {
               </div>
            </div>
         )}
+
+         {/* Continue Exploring */}
+         <div className="mt-20 border-t border-white/10 pt-10">
+            <h3 className="text-xl font-bold mb-6 text-center text-white/80">Continue Exploring Verse Hub</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+               <button 
+                  onClick={() => {
+                     trackEvent('Keep Exploring', { target: 'AI Chat' });
+                     navigate('/chat');
+                  }}
+                  className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/20 hover:border-cyan-500/40 transition-all group"
+               >
+                  <Brain className="w-5 h-5 text-cyan-400 mr-2 group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-white group-hover:text-cyan-400 transition-colors">Ask Verse AI</span>
+               </button>
+               <button 
+                  onClick={() => {
+                     trackEvent('Keep Exploring', { target: 'Market' });
+                     navigate('/');
+                  }}
+                  className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/20 hover:border-purple-500/40 transition-all group"
+               >
+                  <Zap className="w-5 h-5 text-purple-400 mr-2 group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-white group-hover:text-purple-400 transition-colors">Crypto Market</span>
+               </button>
+               <button 
+                  onClick={() => {
+                     trackEvent('Keep Exploring', { target: 'Football' });
+                     navigate('/football');
+                  }}
+                  className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 hover:from-green-500/20 hover:to-emerald-500/20 border border-green-500/20 hover:border-green-500/40 transition-all group"
+               >
+                  <Sparkles className="w-5 h-5 text-green-400 mr-2 group-hover:scale-110 transition-transform" />
+                  <span className="font-bold text-white group-hover:text-green-400 transition-colors">Football Center</span>
+               </button>
+            </div>
+         </div>
 
       </main>
     </div>

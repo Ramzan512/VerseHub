@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trophy, Flame, ChevronRight, Activity, CalendarDays } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
+import { trackEvent } from "../../lib/analytics";
 
 export function FootballWidget() {
   const [data, setData] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/football/scoreboard")
@@ -26,6 +28,11 @@ export function FootballWidget() {
   }
 
   const events = data.events.slice(0, 4); // Show top 4 matches
+
+  const handleMatchClick = (eventName: string) => {
+    trackEvent('Football Widget Match Clicked', { match: eventName });
+    navigate('/football');
+  };
 
   return (
     <div className="relative rounded-[2rem] p-6 lg:p-8 border-2 border-[#00FF88]/40 shadow-[0_0_30px_rgba(0,255,136,0.3)] overflow-hidden group">
@@ -75,7 +82,7 @@ export function FootballWidget() {
                </h3>
                <p className="text-[#00FF88]/70 text-sm font-medium mt-1">Match Schedule & Live Scores</p>
             </div>
-            <Link to="/football">
+            <Link to="/football" onClick={() => trackEvent('Football Widget Full Hub Clicked')}>
                <Button className="bg-gradient-to-r from-[#00FF88]/20 to-[#00D4FF]/20 text-[#00FF88] hover:bg-[#00FF88]/30 border-2 border-[#00FF88]/50 rounded-full px-6 font-bold shadow-[0_0_20px_rgba(0,255,136,0.3)] hover:shadow-[0_0_30px_rgba(0,255,136,0.5)] transition-all">
                   Full Hub <ChevronRight className="w-4 h-4 ml-2" />
                </Button>
@@ -91,7 +98,7 @@ export function FootballWidget() {
                const detailText = event.status.type.detail;
                
                return (
-                  <Card key={event.id} className="bg-[rgba(0,0,0,0.45)] backdrop-blur-xl border border-white/10 hover:border-[#00FF88]/60 transition-all duration-300 cursor-pointer group/card overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(0,255,136,0.4)]">
+                  <Card key={event.id} onClick={() => handleMatchClick(event.name)} className="bg-[rgba(0,0,0,0.45)] backdrop-blur-xl border border-white/10 hover:border-[#00FF88]/60 transition-all duration-300 cursor-pointer group/card overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(0,255,136,0.4)]">
                      <div className="bg-black/40 px-4 py-2 text-[10px] font-black tracking-widest flex justify-between uppercase border-b border-white/10">
                         <span className={matchStatus === 'in' ? 'text-[#00FF88] animate-pulse flex items-center gap-1 drop-shadow-[0_0_5px_rgba(0,255,136,0.8)]' : 'text-[#00D4FF]'}><Activity className="w-3 h-3" /> {detailText}</span>
                         <span className="text-white/60 font-bold">{event.name}</span>
@@ -129,9 +136,9 @@ export function FootballWidget() {
 
          <div className="mt-8 flex justify-center backdrop-blur-sm bg-black/20 p-3 rounded-2xl border border-white/10">
             <div className="flex flex-wrap items-center gap-4 md:gap-8 text-[#00FF88]/80 text-xs md:text-sm font-bold uppercase tracking-wider w-full justify-center">
-               <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Trophy className="w-4 h-4" /> Team Standings</span>
-               <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><CalendarDays className="w-4 h-4" /> Match Schedule</span>
-               <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Flame className="w-4 h-4" /> Top Scorers</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Team Standings' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Trophy className="w-4 h-4" /> Team Standings</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Match Schedule' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><CalendarDays className="w-4 h-4" /> Match Schedule</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Top Scorers' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Flame className="w-4 h-4" /> Top Scorers</span>
             </div>
          </div>
        </div>

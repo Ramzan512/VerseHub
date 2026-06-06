@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Gauge, Clock, RefreshCw } from 'lucide-react';
 import axios from 'axios';
+import { trackEvent } from '../../lib/analytics';
 
 export function FearGreedWidget() {
   const [data, setData] = useState<{ value: number; classification: string; timestamp: string } | null>(null);
@@ -87,7 +88,10 @@ export function FearGreedWidget() {
   const offset = circumference - (value / 100) * circumference;
 
   return (
-    <Card className="h-full bg-gradient-to-br from-[#38BDF8] via-[#8B5CF6] to-[#6366F1] border-2 border-[#FFD700] backdrop-blur-xl shadow-[0_0_30px_rgba(0,229,255,0.4),_0_0_30px_rgba(139,92,246,0.4)] rounded-[2rem] overflow-hidden relative group transition-all flex flex-col items-center">
+    <Card 
+      onClick={() => trackEvent('Market Widget Clicked', { sentiment: classificationText, score: value.toString() })}
+      className="cursor-pointer hover:scale-[1.02] h-full bg-gradient-to-br from-[#38BDF8] via-[#8B5CF6] to-[#6366F1] border-2 border-[#FFD700] backdrop-blur-xl shadow-[0_0_30px_rgba(0,229,255,0.4),_0_0_30px_rgba(139,92,246,0.4)] rounded-[2rem] overflow-hidden relative group transition-all flex flex-col items-center"
+    >
       <div className="absolute inset-0 bg-white/5 backdrop-blur-md z-0" />
       <CardContent className="p-8 md:p-12 relative z-10 flex flex-col h-full w-full flex-1">
         <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4 w-full text-center md:text-left">

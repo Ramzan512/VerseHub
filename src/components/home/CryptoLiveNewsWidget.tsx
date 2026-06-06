@@ -4,6 +4,7 @@ import { ExternalLink, RefreshCw, RadioReceiver, Globe, X, Share2, Bookmark, Che
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { trackEvent } from '../../lib/analytics';
 
 interface NewsItem {
   id?: string;
@@ -98,6 +99,11 @@ export function CryptoLiveNewsWidget() {
     return Math.floor(seconds) + "s ago";
   };
 
+  const handleArticleClick = (item: NewsItem) => {
+     trackEvent('News Widget Article Clicked', { headline: item.headline });
+     navigate(`/news/${encodeURIComponent(item.id || item.headline)}`, { state: { article: item, newsList: news } });
+  };
+
   return (
     <Card className="h-full border-none bg-transparent shadow-none w-full mb-8">
       <CardContent className="p-0 flex flex-col h-full bg-gradient-to-br from-[#0F172A]/80 to-[#1E1B4B]/80 rounded-[2rem] border border-[#00BFFF]/40 shadow-[0_0_30px_rgba(0,191,255,0.15)] hover:border-[#00BFFF]/60 hover:shadow-[0_0_50px_rgba(0,191,255,0.3)] transition-all relative overflow-hidden backdrop-blur-xl group">
@@ -175,7 +181,7 @@ export function CryptoLiveNewsWidget() {
                       transition={{ delay: Math.min(idx * 0.1, 0.5) }}
                       key={item.id || idx}
                       className="group flex flex-col min-h-[460px] bg-gradient-to-br from-[#0B1221] to-[#160E2A] hover:to-[#1A103C] border border-[#FFD700]/30 hover:border-[#FFD700] rounded-3xl overflow-hidden transition-all duration-300 cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(255,215,0,0.3)] backdrop-blur-md w-full"
-                      onClick={() => navigate(`/news/${encodeURIComponent(item.id || item.headline)}`, { state: { article: item, newsList: news } })}
+                      onClick={() => handleArticleClick(item)}
                     >
                       {/* Image Banner */}
                       <div className="w-full h-[200px] relative overflow-hidden bg-[#0A1020] border-b border-white/10 shrink-0">
@@ -229,7 +235,7 @@ export function CryptoLiveNewsWidget() {
 
               {/* Open News Hub Button */}
               <div className="mt-8 relative z-20">
-                <Link to="/news" className="flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-black text-[15px] tracking-widest uppercase py-4 rounded-2xl shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all transform hover:-translate-y-0.5 relative overflow-hidden group border border-white/20">
+                <Link to="/news" onClick={() => trackEvent('News Widget Open Hub Clicked')} className="flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-500 text-white font-black text-[15px] tracking-widest uppercase py-4 rounded-2xl shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all transform hover:-translate-y-0.5 relative overflow-hidden group border border-white/20">
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
                   <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
                     📰 OPEN NEWS HUB
