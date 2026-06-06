@@ -15,9 +15,9 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([
     "🚀 What is Verse?",
-    "📈 Latest Crypto Market Update",
-    "📰 Today's Top Crypto News",
-    "🎓 Teach Me Web3 Basics"
+    "🌐 What is Web3?",
+    "₿ What is Bitcoin?",
+    "🔐 How to Stay Safe in Crypto?"
   ]);
 
   const handleSend = async (userText: string) => {
@@ -118,7 +118,6 @@ export default function Chat() {
                     onClick={() => {
                       trackEvent('Quick Action Clicked', { button: action });
                       handleSend(action);
-                      setSuggestions(prev => prev.filter(s => s !== action));
                     }}
                     className="text-left flex-1 min-w-[240px] bg-gradient-to-r from-secondary/40 to-secondary/20 hover:from-[#00BFFF]/20 hover:to-[#00FF88]/10 border border-white/10 hover:border-[#00BFFF]/50 text-white rounded-xl p-3 md:p-4 text-[13px] md:text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(0,191,255,0.2)] hover:-translate-y-0.5 group"
                   >
