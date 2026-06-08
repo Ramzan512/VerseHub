@@ -5,8 +5,6 @@ import { Input } from '../components/ui/input';
 import { User, Send } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 
-import { NativeBanner } from '../components/ads/NativeBanner';
-
 export default function Chat() {
   const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([
     { role: 'assistant', content: "Hi! I'm VerseHub AI.\nHow can I help you today?" }
@@ -143,8 +141,6 @@ export default function Chat() {
           </Button>
         </form>
       </Card>
-      
-      <NativeBanner />
     </div>
   );
 }
