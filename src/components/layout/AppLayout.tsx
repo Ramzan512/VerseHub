@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Menu, ArrowLeft } from 'lucide-react';
+import { Menu, ArrowLeft, Sun, Moon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Footer } from './Footer';
 import { trackEvent } from '../../lib/analytics';
@@ -8,7 +8,20 @@ import { trackEvent } from '../../lib/analytics';
 export default function AppLayout() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(() => {
+    return localStorage.getItem('theme') === 'light';
+  });
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.documentElement.classList.add('light-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+      localStorage.setItem('theme', 'dark');
+    }
+  }, [isLightMode]);
   const sessionStartTime = useRef<number>(Date.now());
   const maxScrollDepth = useRef<number>(0);
   
@@ -88,8 +101,25 @@ export default function AppLayout() {
           </span>
         </Link>
         
-        {/* Right Side: Hamburger Menu */}
-        <div className="relative" ref={menuRef}>
+        {/* Right Side: Menu Integration */}
+        <div className="relative flex items-center gap-3" ref={menuRef}>
+          <button
+            className="flex items-center gap-2 px-3 sm:px-4 h-[44px] rounded-full bg-gradient-to-br from-[#00BFFF]/20 to-[#8A2BE2]/20 backdrop-blur-md border border-[#00BFFF]/30 justify-center text-[#00FFFF] hover:bg-white/10 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all"
+            onClick={() => setIsLightMode(!isLightMode)}
+          >
+            {isLightMode ? (
+               <>
+                 <Sun className="w-5 h-5 text-yellow-500" />
+                 <span className="hidden sm:block text-sm font-bold tracking-wide text-[#0f172a]">Verse Light</span>
+               </>
+            ) : (
+               <>
+                 <Moon className="w-5 h-5 text-[#00FFFF]" />
+                 <span className="hidden sm:block text-sm font-bold tracking-wide">Verse Dark</span>
+               </>
+            )}
+          </button>
+          
           <button 
             className="w-[44px] h-[44px] rounded-full bg-gradient-to-br from-[#00BFFF]/20 to-[#8A2BE2]/20 backdrop-blur-md border border-[#00BFFF]/30 flex items-center justify-center text-[#00FFFF] hover:bg-white/10 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -110,7 +140,7 @@ export default function AppLayout() {
                          target="_blank"
                          rel="noopener noreferrer"
                          onClick={() => setIsMenuOpen(false)}
-                         className="block w-full text-left px-4 py-3 rounded-xl text-sm lg:text-base font-semibold text-white/80 hover:text-[#00FFFF] hover:bg-white/5 hover:shadow-[inset_0_0_15px_rgba(0,191,255,0.2)] transition-all"
+                         className="block w-full text-left px-4 py-3 rounded-xl text-sm lg:text-base font-semibold text-text-muted hover:text-[#00FFFF] hover:bg-card-hover hover:shadow-[inset_0_0_15px_rgba(0,191,255,0.2)] transition-all"
                        >
                          {item.name}
                        </a>
@@ -121,7 +151,7 @@ export default function AppLayout() {
                        key={`${item.name}-${idx}`} 
                        to={item.path}
                        onClick={() => setIsMenuOpen(false)}
-                       className="block w-full text-left px-4 py-3 rounded-xl text-sm lg:text-base font-semibold text-white/80 hover:text-[#00FFFF] hover:bg-white/5 hover:shadow-[inset_0_0_15px_rgba(0,191,255,0.2)] transition-all"
+                       className="block w-full text-left px-4 py-3 rounded-xl text-sm lg:text-base font-semibold text-text-muted hover:text-[#00FFFF] hover:bg-card-hover hover:shadow-[inset_0_0_15px_rgba(0,191,255,0.2)] transition-all"
                      >
                        {item.name}
                      </Link>
@@ -141,7 +171,7 @@ export default function AppLayout() {
               <Link to="/">
                 <Button 
                   variant="ghost" 
-                  className="group bg-[#050b14]/50 border border-purple-500/20 text-purple-200 hover:text-white hover:bg-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)] hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] rounded-2xl backdrop-blur-xl h-11 px-5 transition-all duration-300"
+                  className="group bg-[#050b14]/50 border border-purple-500/20 text-purple-200 hover:text-text hover:bg-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)] hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] rounded-2xl backdrop-blur-xl h-11 px-5 transition-all duration-300"
                 >
                   <ArrowLeft className="w-5 h-5 mr-3 group-hover:-translate-x-1 transition-transform" />
                   <span className="font-bold tracking-wide">Back to Home</span>

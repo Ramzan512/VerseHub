@@ -103,7 +103,7 @@ export function CryptoWidget() {
 
   if (loading && !coins.length) {
     return (
-      <div className="flex justify-center items-center h-64 bg-[#081120]/60 rounded-3xl backdrop-blur-md border border-white/10">
+      <div className="flex justify-center items-center h-64 bg-[#081120]/60 rounded-3xl backdrop-blur-md border border-border">
         <RefreshCw className="w-8 h-8 animate-spin text-purple-400" />
       </div>
     );
@@ -125,14 +125,14 @@ export function CryptoWidget() {
       {/* Global Market Overview */}
       {globalData && (
         <Card className="bg-gradient-to-br from-[#00E5FF]/40 via-[#8B5CF6]/40 to-[#FFD700]/40 border-2 border-[#FFD700] backdrop-blur-xl shadow-[0_0_20px_rgba(255,215,0,0.6)] rounded-[2rem] overflow-hidden relative transition-all group">
-          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-card-hover backdrop-blur-sm z-0 pointer-events-none" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,215,0,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none animate-pulse" />
           <CardContent className="p-5 md:p-8 relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             <div className="flex flex-col gap-3">
-              <span className="text-white/90 text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">
+              <span className="text-text-muted text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">
                 <Globe className="w-5 h-5 text-[#00E5FF]" /> Total Market Cap
               </span>
-              <span className="text-2xl md:text-4xl font-black text-white drop-shadow-md">
+              <span className="text-2xl md:text-4xl font-black text-text drop-shadow-md">
                 {formatCurrency(globalData.total_market_cap.usd)}
               </span>
               <span className={`text-base font-bold flex items-center gap-1 ${globalData.market_cap_change_percentage_24h_usd >= 0 ? 'text-[#00FF88] drop-shadow-[0_0_8px_rgba(0,255,136,0.6)]' : 'text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]'}`}>
@@ -141,26 +141,26 @@ export function CryptoWidget() {
               </span>
             </div>
             <div className="flex flex-col gap-3">
-              <span className="text-white/90 text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(139,92,246,0.8)]">
+              <span className="text-text-muted text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(139,92,246,0.8)]">
                 <Activity className="w-5 h-5 text-[#8B5CF6]" /> 24h Volume
               </span>
-              <span className="text-2xl md:text-4xl font-black text-white drop-shadow-md">
+              <span className="text-2xl md:text-4xl font-black text-text drop-shadow-md">
                 {formatCurrency(globalData.total_volume.usd)}
               </span>
             </div>
             <div className="flex flex-col gap-3">
-              <span className="text-white/90 text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">
+              <span className="text-text-muted text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">
                 <DollarSign className="w-5 h-5 text-[#00E5FF]" /> BTC Dominance
               </span>
-              <span className="text-2xl md:text-4xl font-black text-white drop-shadow-md">
+              <span className="text-2xl md:text-4xl font-black text-text drop-shadow-md">
                 {globalData.market_cap_percentage.btc.toFixed(1)}%
               </span>
             </div>
             <div className="flex flex-col gap-3">
-              <span className="text-white/90 text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,255,136,0.8)]">
+              <span className="text-text-muted text-[11px] md:text-sm font-bold uppercase tracking-wider flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,255,136,0.8)]">
                 <RefreshCw className="w-5 h-5 text-[#00FF88]" /> ETH Dominance
               </span>
-              <span className="text-2xl md:text-4xl font-black text-white drop-shadow-md">
+              <span className="text-2xl md:text-4xl font-black text-text drop-shadow-md">
                 {globalData.market_cap_percentage.eth.toFixed(1)}%
               </span>
             </div>
@@ -174,7 +174,7 @@ export function CryptoWidget() {
         <div className="overflow-x-auto relative z-10">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-white">
+              <tr className="bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-text">
                 <th className="px-6 py-4 font-bold uppercase tracking-widest text-xs">Asset</th>
                 <th className="px-6 py-4 font-bold uppercase tracking-widest text-xs text-right">Price</th>
                 <th className="px-6 py-4 font-bold uppercase tracking-widest text-xs text-right">24h Change</th>
@@ -185,22 +185,22 @@ export function CryptoWidget() {
             </thead>
             <tbody>
               {coins.map((coin, idx) => (
-                <tr key={coin.id} className={`border-b border-white/5 transition-colors group/row ${idx % 2 === 0 ? 'bg-[#0F172A]/80' : 'bg-[#1E1B4B]/80'} hover:bg-[#8B5CF6]/30`}>
+                <tr key={coin.id} className={`border-b border-border transition-colors group/row ${idx % 2 === 0 ? 'bg-[#0F172A]/80' : 'bg-[#1E1B4B]/80'} hover:bg-[#8B5CF6]/30`}>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-4">
                       {coin.image ? (
                            <img src={coin.image} alt={coin.name} className="w-10 h-10 rounded-full drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]" />
                       ) : (
-                           <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{coin.symbol?.charAt(0)}</div>
+                           <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-text drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{coin.symbol?.charAt(0)}</div>
                       )}
                       <div>
-                        <div className="font-bold text-white text-base">{coin.name}</div>
-                        <div className="text-white/60 text-sm uppercase font-semibold tracking-wider">{coin.symbol}</div>
+                        <div className="font-bold text-text text-base">{coin.name}</div>
+                        <div className="text-text-muted text-sm uppercase font-semibold tracking-wider">{coin.symbol}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-5 text-right">
-                    <div className="font-bold text-white text-base drop-shadow-sm">{formatCurrency(coin.current_price)}</div>
+                    <div className="font-bold text-text text-base drop-shadow-sm">{formatCurrency(coin.current_price)}</div>
                   </td>
                   <td className="px-6 py-5 text-right">
                     <div className={`font-bold flex items-center justify-end gap-1 ${coin.price_change_percentage_24h >= 0 ? 'text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.5)]' : 'text-red-400 drop-shadow-[0_0_5px_rgba(248,113,113,0.5)]'}`}>
@@ -209,7 +209,7 @@ export function CryptoWidget() {
                     </div>
                   </td>
                   <td className="px-6 py-5 text-right">
-                    <div className="font-medium text-white/90 drop-shadow-sm">{formatCurrency(coin.market_cap)}</div>
+                    <div className="font-medium text-text-muted drop-shadow-sm">{formatCurrency(coin.market_cap)}</div>
                   </td>
                   <td className="px-6 py-5 w-32 h-16">
                     <div className="h-12 w-32 opacity-80 group-hover/row:opacity-100 transition-opacity">
@@ -230,7 +230,7 @@ export function CryptoWidget() {
                   </td>
                   <td className="px-6 py-5 text-center">
                     <a href={`https://coinmarketcap.com/currencies/${coin.cmc_link}/`} target="_blank" rel="noopener noreferrer">
-                      <Button className="rounded-full bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-white font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all text-xs h-9 px-6 hover:shadow-[0_0_20px_rgba(255,215,0,0.6)]">
+                      <Button className="rounded-full bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-text font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all text-xs h-9 px-6 hover:shadow-[0_0_20px_rgba(255,215,0,0.6)]">
                         Details
                         <ExternalLink className="w-3 h-3 ml-2" />
                       </Button>
@@ -254,15 +254,15 @@ export function CryptoWidget() {
                   {coin.image ? (
                         <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full drop-shadow-[0_0_4px_rgba(255,255,255,0.2)]" />
                   ) : (
-                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white text-xs drop-shadow-[0_0_4px_rgba(255,255,255,0.2)]">{coin.symbol?.charAt(0)}</div>
+                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-text text-xs drop-shadow-[0_0_4px_rgba(255,255,255,0.2)]">{coin.symbol?.charAt(0)}</div>
                   )}
                   <div>
-                    <div className="font-bold text-white leading-tight drop-shadow-sm">{coin.name}</div>
-                    <div className="text-white/70 text-xs uppercase font-semibold">{coin.symbol}</div>
+                    <div className="font-bold text-text leading-tight drop-shadow-sm">{coin.name}</div>
+                    <div className="text-text-muted text-xs uppercase font-semibold">{coin.symbol}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-white text-base drop-shadow-sm">{formatCurrency(coin.current_price)}</div>
+                  <div className="font-black text-text text-base drop-shadow-sm">{formatCurrency(coin.current_price)}</div>
                   <div className={`text-xs font-bold flex items-center justify-end gap-1 ${coin.price_change_percentage_24h >= 0 ? 'text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.5)]' : 'text-red-400 drop-shadow-[0_0_5px_rgba(248,113,113,0.5)]'}`}>
                     {coin.price_change_percentage_24h >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                     {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
@@ -270,9 +270,9 @@ export function CryptoWidget() {
                 </div>
               </div>
               
-              <div className="bg-white/5 rounded-lg p-2 mb-3 flex items-center justify-between text-xs">
-                <span className="text-white/60 font-semibold uppercase tracking-wider text-[10px]">Market Cap</span>
-                <span className="font-bold text-white">{formatCurrency(coin.market_cap)}</span>
+              <div className="bg-card-hover rounded-lg p-2 mb-3 flex items-center justify-between text-xs">
+                <span className="text-text-muted font-semibold uppercase tracking-wider text-[10px]">Market Cap</span>
+                <span className="font-bold text-text">{formatCurrency(coin.market_cap)}</span>
               </div>
               
               <div className="flex items-center justify-between mt-1 gap-4">
@@ -292,7 +292,7 @@ export function CryptoWidget() {
                   </ResponsiveContainer>
                 </div>
                 <a href={`https://coinmarketcap.com/currencies/${coin.cmc_link}/`} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button className="w-full rounded-full bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-white font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all text-xs h-9 hover:shadow-[0_0_20px_rgba(255,215,0,0.6)]">
+                  <Button className="w-full rounded-full bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-text font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all text-xs h-9 hover:shadow-[0_0_20px_rgba(255,215,0,0.6)]">
                     Details
                     <ExternalLink className="w-3 h-3 ml-2" />
                   </Button>

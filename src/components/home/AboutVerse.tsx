@@ -95,7 +95,7 @@ export function AboutVerse() {
            <img src="https://i.postimg.cc/mg6FZkJH/IMG-20260531-120027.png" alt="Verse Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
            ABOUT VERSE ECOSYSTEM
          </h2>
-         <p className="text-white/60 font-medium max-w-2xl text-sm md:text-base">
+         <p className="text-text-muted font-medium max-w-2xl text-sm md:text-base">
            Discover the engine powering Bitcoin.com's gamified Web3 ecosystem, uniting millions of users through utility, rewards, and decentralized finance.
          </p>
       </div>
@@ -115,20 +115,20 @@ export function AboutVerse() {
                 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-black/40 border border-[#8B5CF6]/50 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.2)] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-card border border-[#8B5CF6]/50 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.2)] group-hover:scale-110 transition-transform duration-300">
                      <item.icon className="w-6 h-6 text-[#00D4FF]" />
                   </div>
-                  <h3 className="text-xl font-bold text-white leading-tight group-hover:text-[#FFD700] transition-colors">{item.title}</h3>
+                  <h3 className="text-xl font-bold text-text leading-tight group-hover:text-[#FFD700] transition-colors">{item.title}</h3>
                 </div>
 
                 {item.content && (
-                  <p className="text-white/70 text-sm leading-relaxed flex-1">{item.content}</p>
+                  <p className="text-text-muted text-sm leading-relaxed flex-1">{item.content}</p>
                 )}
 
                 {item.bullets && (
                   <ul className="space-y-2 flex-1 mt-2">
                     {item.bullets.map((bullet, i) => (
-                      <li key={i} className="text-white/70 text-sm flex items-start gap-2">
+                      <li key={i} className="text-text-muted text-sm flex items-start gap-2">
                         <span className="text-[#00FF88] mt-1 text-[10px]">●</span>
                         <span className="leading-relaxed">{bullet}</span>
                       </li>
@@ -151,7 +151,7 @@ export function AboutVerse() {
              viewport={{ once: true }}
              transition={{ delay: 0.2 + (idx * 0.1), duration: 0.4 }}
           >
-             <Card className="bg-white/5 backdrop-blur-md border border-[#00D4FF]/30 hover:border-[#00D4FF]/70 shadow-[0_0_15px_rgba(0,212,255,0.1)] rounded-2xl overflow-hidden group">
+             <Card className="bg-card-hover backdrop-blur-md border border-[#00D4FF]/30 hover:border-[#00D4FF]/70 shadow-[0_0_15px_rgba(0,212,255,0.1)] rounded-2xl overflow-hidden group">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center gap-2">
                    <div className="w-10 h-10 rounded-full bg-[#00D4FF]/10 flex items-center justify-center mb-1 group-hover:bg-[#00D4FF]/20 transition-colors">
                       <stat.icon className="w-5 h-5 text-[#00D4FF]" />
@@ -175,9 +175,9 @@ export function AboutVerse() {
              transition={{ delay: 0.3 + (idx * 0.05), duration: 0.4 }}
           >
             <a href={link.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-               <Button className={`w-full h-auto py-4 px-3 flex flex-col items-center justify-center gap-3 bg-gradient-to-b ${link.color} hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-white/20 rounded-xl transition-all duration-300 hover:-translate-y-1`}>
-                  <link.icon className="w-6 h-6 text-white" />
-                  <span className="text-white text-xs md:text-sm font-bold text-center whitespace-normal leading-tight">{link.name}</span>
+               <Button className={`w-full h-auto py-4 px-3 flex flex-col items-center justify-center gap-3 bg-gradient-to-b ${link.color} hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-border rounded-xl transition-all duration-300 hover:-translate-y-1`}>
+                  <link.icon className="w-6 h-6 text-text" />
+                  <span className="text-text text-xs md:text-sm font-bold text-center whitespace-normal leading-tight">{link.name}</span>
                </Button>
             </a>
           </motion.div>

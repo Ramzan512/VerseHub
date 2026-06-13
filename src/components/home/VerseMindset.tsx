@@ -38,7 +38,7 @@ export function VerseMindset() {
           <img src="https://i.postimg.cc/mg6FZkJH/IMG-20260531-120027.png" alt="Verse Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
           VERSE MINDSET
         </h2>
-        <p className="text-white/80 font-medium max-w-2xl text-lg tracking-widest uppercase">
+        <p className="text-text-muted font-medium max-w-2xl text-lg tracking-widest uppercase">
           Build. Learn. Earn. Repeat.
         </p>
       </div>
@@ -52,7 +52,7 @@ export function VerseMindset() {
             return (
               <div
                 key={idx}
-                className="w-[280px] sm:w-[320px] shrink-0 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl relative group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:bg-white/10"
+                className="w-[280px] sm:w-[320px] shrink-0 p-6 rounded-2xl bg-card-hover border border-border backdrop-blur-xl relative group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:bg-white/10"
                 style={{ boxShadow: `0 0 20px ${item.glow.replace('0.5', '0.1')}` }}
               >
                 {/* Hover Glow Edge */}
@@ -65,10 +65,10 @@ export function VerseMindset() {
                   className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-gradient-to-br ${item.color} shadow-lg`}
                   style={{ boxShadow: `0 0 20px ${item.glow}` }}
                 >
-                  <Icon className="w-7 h-7 text-white" />
+                  <Icon className="w-7 h-7 text-text" />
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-3 tracking-wide">{item.title}</h3>
+                <h3 className="text-xl font-bold text-text mb-3 tracking-wide">{item.title}</h3>
                 <p className="text-gray-400 font-medium leading-relaxed">{item.desc}</p>
               </div>
             );

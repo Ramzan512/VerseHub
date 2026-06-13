@@ -101,9 +101,9 @@ export function TopGainersLiveFeed() {
         <div className="flex-1 overflow-hidden relative h-full flex items-center">
           <div className="flex items-center h-full relative z-10 touch-pan-x w-max animate-marquee md:hover:[animation-play-state:paused]">
             {displayGainers.map((coin, idx) => (
-              <div key={`${coin.id}-${idx}`} className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 md:py-2 px-3 md:px-4 mr-4 md:mr-6 rounded-xl bg-black/30 border border-white/5 shadow-sm hover:bg-black/50 transition-colors cursor-pointer text-sm">
+              <div key={`${coin.id}-${idx}`} className="flex items-center gap-2 md:gap-3 shrink-0 py-1.5 md:py-2 px-3 md:px-4 mr-4 md:mr-6 rounded-xl bg-card border border-border shadow-sm hover:bg-card transition-colors cursor-pointer text-sm">
                 <img src={coin.image} alt={coin.name} className="w-5 h-5 md:w-6 md:h-6 shrink-0 rounded-full bg-white/10" />
-                <div className="flex items-center gap-1.5 md:gap-2 text-white">
+                <div className="flex items-center gap-1.5 md:gap-2 text-text">
                   <span className="font-bold uppercase tracking-wider">{coin.symbol}</span>
                   <span className="font-mono text-yellow-100">{formatPrice(coin.current_price)}</span>
                   <span className="font-black text-green-400">

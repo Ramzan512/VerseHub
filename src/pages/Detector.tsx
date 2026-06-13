@@ -50,14 +50,14 @@ export default function Detector() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="bg-card/50 border-white/5 order-2 md:order-1">
+        <Card className="bg-card/50 border-border order-2 md:order-1">
           <CardContent className="p-6 h-full flex flex-col">
             <h3 className="font-semibold mb-4">Input Text</h3>
             <Textarea 
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Paste text here to analyze..." 
-              className="min-h-[300px] flex-1 resize-none bg-background/50 border-white/10 leading-relaxed"
+              className="min-h-[300px] flex-1 resize-none bg-background/50 border-border leading-relaxed"
             />
             <Button onClick={analyze} disabled={!text.trim() || loading} className="w-full mt-4">
               {loading ? "Analyzing..." : "Run Analysis"} <Search className="ml-2 w-4 h-4" />
@@ -65,7 +65,7 @@ export default function Detector() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 border-white/5 order-1 md:order-2">
+        <Card className="bg-card/50 border-border order-1 md:order-2">
           <CardContent className="p-6">
             <h3 className="font-semibold mb-4">Results</h3>
             
@@ -94,7 +94,7 @@ export default function Detector() {
 
             {result && !loading && (
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
-                <div className="text-center p-6 bg-background rounded-xl border border-white/5">
+                <div className="text-center p-6 bg-background rounded-xl border border-border">
                   <div className="text-6xl font-bold mb-2 tracking-tighter">
                     <span className={isAi ? "text-destructive" : isMixed ? "text-yellow-500" : "text-emerald-500"}>
                       {result.score}%

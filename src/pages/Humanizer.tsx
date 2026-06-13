@@ -63,7 +63,7 @@ export default function Humanizer() {
 
       <div className="grid md:grid-cols-2 gap-6 flex-1 min-h-[500px]">
         {/* Input */}
-        <Card className="bg-card/50 border-white/5 flex flex-col">
+        <Card className="bg-card/50 border-border flex flex-col">
           <CardContent className="p-0 flex-1 flex flex-col group relative">
             <Textarea 
               value={text}
@@ -71,7 +71,7 @@ export default function Humanizer() {
               placeholder="Paste the AI-generated text you want to humanize here..." 
               className="flex-1 w-full p-6 border-0 focus-visible:ring-0 resize-none bg-transparent h-full min-h-[300px] text-base leading-relaxed"
             />
-            <div className="p-4 border-t border-white/5 bg-background/30 flex justify-between items-center rounded-b-xl">
+            <div className="p-4 border-t border-border bg-background/30 flex justify-between items-center rounded-b-xl">
               <span className="text-xs text-muted-foreground">{text.length} characters</span>
               <Button onClick={humanize} disabled={!text.trim() || loading} className="shadow-lg shadow-primary/20">
                 {loading ? <RefreshCw className="mr-2 w-4 h-4 animate-spin" /> : <UserCheck className="mr-2 w-4 h-4" />}
@@ -82,7 +82,7 @@ export default function Humanizer() {
         </Card>
 
         {/* Output */}
-        <Card className="bg-card/50 border-white/5 flex flex-col relative overflow-hidden">
+        <Card className="bg-card/50 border-border flex flex-col relative overflow-hidden">
           {loading && (
             <div className="absolute inset-0 z-10 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center">
               <RefreshCw className="w-8 h-8 animate-spin text-primary mb-4" />
@@ -108,7 +108,7 @@ export default function Humanizer() {
                 <div className="flex-1 overflow-y-auto pr-2 text-base leading-relaxed whitespace-pre-wrap">
                   {result}
                 </div>
-                <div className="pt-4 border-t border-white/5 mt-4 flex justify-end">
+                <div className="pt-4 border-t border-border mt-4 flex justify-end">
                   <Button variant="secondary" onClick={() => navigator.clipboard.writeText(result)}>
                     <Copy className="w-4 h-4 mr-2"/> Copy Output
                   </Button>

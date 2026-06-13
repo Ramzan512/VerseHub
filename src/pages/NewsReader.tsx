@@ -81,7 +81,7 @@ export function NewsReader() {
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-[#050816] flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-[#050816] flex flex-col items-center justify-center text-text">
          <h2 className="text-2xl font-bold mb-4">Article not found</h2>
          <button onClick={() => navigate('/news')} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full font-bold hover:scale-105 transition-transform">
             Return to News Hub
@@ -110,15 +110,15 @@ export function NewsReader() {
   const relatedArticles = allNews.filter(n => n.id !== article.id && n.headline !== article.headline).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-[#050816] text-white">
+    <div className="min-h-screen bg-[#050816] text-text">
       {/* Top Navbar */}
-      <div className="sticky top-0 z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
+      <div className="sticky top-0 z-50 bg-card backdrop-blur-xl border-b border-border">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <button 
              onClick={() => navigate(-1)}
-             className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
+             className="flex items-center gap-2 text-text-muted hover:text-text transition-colors group"
           >
-             <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors border border-white/10">
+             <div className="w-8 h-8 rounded-full bg-card-hover flex items-center justify-center group-hover:bg-white/10 transition-colors border border-border">
                 <ArrowLeft className="w-4 h-4" />
              </div>
              <span className="font-bold text-sm tracking-wide hidden sm:block">BACK</span>
@@ -128,14 +128,14 @@ export function NewsReader() {
             <button 
                title="Share News"
                onClick={() => trackEvent('Article Shared', { headline: article.headline })}
-               className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
+               className="w-10 h-10 rounded-full flex items-center justify-center bg-card-hover border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               <Share2 className="w-[18px] h-[18px]" />
             </button>
             <button 
                title="Save News"
                onClick={() => trackEvent('Article Saved', { headline: article.headline })}
-               className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-[0_0_15px_rgba(168,85,247,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
+               className="w-10 h-10 rounded-full flex items-center justify-center bg-card-hover border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 hover:border-purple-400 hover:shadow-[0_0_15px_rgba(168,85,247,0.6)] transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               <Bookmark className="w-[18px] h-[18px]" />
             </button>
@@ -147,29 +147,29 @@ export function NewsReader() {
         
         {/* Meta & Tags */}
         <div className="flex items-center gap-3 mb-6 flex-wrap">
-          <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+          <div className="flex items-center gap-2 bg-card-hover border border-border px-3 py-1.5 rounded-full backdrop-blur-md">
             <img src={article.sourceLogo} alt={article.source} className="w-5 h-5 rounded-full bg-white object-contain p-0.5" />
-            <span className="text-xs font-black text-white/90 uppercase tracking-widest">{article.source}</span>
+            <span className="text-xs font-black text-text-muted uppercase tracking-widest">{article.source}</span>
           </div>
           
-          <span className="flex items-center gap-1.5 text-xs text-white/60 font-mono">
+          <span className="flex items-center gap-1.5 text-xs text-text-muted font-mono">
             <Clock className="w-3.5 h-3.5" />
             {new Date(article.time).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
           </span>
 
-          <span className="flex items-center gap-1.5 text-xs text-white/60 font-mono ml-auto">
+          <span className="flex items-center gap-1.5 text-xs text-text-muted font-mono ml-auto">
              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
              {readTime} MIN READ
           </span>
         </div>
 
         {/* Headline */}
-        <h1 className="text-[32px] sm:text-[46px] md:text-[56px] font-bold leading-tight mb-8 text-white">
+        <h1 className="text-[32px] sm:text-[46px] md:text-[56px] font-bold leading-tight mb-8 text-text">
            {article.headline || (article as any).title}
         </h1>
 
         {/* Featured Image */}
-        <div className="w-full aspect-video sm:aspect-[21/9] bg-[#0A1020] rounded-2xl sm:rounded-[2rem] overflow-hidden mb-10 border border-white/10 shadow-2xl relative">
+        <div className="w-full aspect-video sm:aspect-[21/9] bg-[#0A1020] rounded-2xl sm:rounded-[2rem] overflow-hidden mb-10 border border-border shadow-2xl relative">
            <img 
               src={imageUrl} 
               alt="Featured" 
@@ -186,7 +186,7 @@ export function NewsReader() {
            <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 blur-[30px] -z-10 opacity-50 group-hover:opacity-100 transition-opacity duration-1000"></div>
            <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-                 <Brain className="w-4 h-4 text-white" />
+                 <Brain className="w-4 h-4 text-text" />
               </div>
               <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 tracking-wide flex items-center gap-2">
                  🧠 ELI5 Summary <Sparkles className="w-4 h-4 text-yellow-400" />
@@ -198,40 +198,40 @@ export function NewsReader() {
         </div>
 
         {/* Content Area */}
-        <div className="prose prose-invert max-w-none text-[18px] sm:text-[20px] leading-[1.8] text-white prose-p:text-white prose-p:leading-[1.8] prose-p:mb-[20px] prose-headings:text-white prose-li:text-gray-300">
-           <p className="text-[20px] sm:text-[22px] font-medium text-white leading-[1.8] mb-8 border-l-4 border-cyan-500 pl-6 bg-cyan-500/5 py-5 rounded-r-xl">
+        <div className="prose prose-invert max-w-none text-[18px] sm:text-[20px] leading-[1.8] text-text prose-p:text-text prose-p:leading-[1.8] prose-p:mb-[20px] prose-headings:text-text prose-li:text-gray-300">
+           <p className="text-[20px] sm:text-[22px] font-medium text-text leading-[1.8] mb-8 border-l-4 border-cyan-500 pl-6 bg-cyan-500/5 py-5 rounded-r-xl">
               {article.summary}
            </p>
 
-           <h3 className="text-[22px] sm:text-[26px] font-bold text-white mt-12 mb-6 flex items-center gap-2">
+           <h3 className="text-[22px] sm:text-[26px] font-bold text-text mt-12 mb-6 flex items-center gap-2">
               <Zap className="w-6 h-6 text-yellow-400" /> Key Highlights
            </h3>
            <ul className="space-y-4 mb-12 list-none pl-0">
-             <li className="flex items-start gap-4 bg-white/5 p-5 rounded-xl border border-white/5">
+             <li className="flex items-start gap-4 bg-card-hover p-5 rounded-xl border border-border">
                 <span className="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5 text-sm font-bold font-mono">1</span>
                 <span className="text-[18px] sm:text-[20px] text-gray-300 leading-[1.8]">{article.headline}</span>
              </li>
-             <li className="flex items-start gap-4 bg-white/5 p-5 rounded-xl border border-white/5">
+             <li className="flex items-start gap-4 bg-card-hover p-5 rounded-xl border border-border">
                 <span className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 mt-0.5 text-sm font-bold font-mono">2</span>
                 <span className="text-[18px] sm:text-[20px] text-gray-300 leading-[1.8]">Market reactions are highly anticipated following this major announcement.</span>
              </li>
-             <li className="flex items-start gap-4 bg-white/5 p-5 rounded-xl border border-white/5">
+             <li className="flex items-start gap-4 bg-card-hover p-5 rounded-xl border border-border">
                 <span className="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center shrink-0 mt-0.5 text-sm font-bold font-mono">3</span>
                 <span className="text-[18px] sm:text-[20px] text-gray-300 leading-[1.8]">Impact extends across different layers of the cryptocurrency ecosystem.</span>
              </li>
            </ul>
 
            {article.content && article.content.trim() !== '' && (
-              <div dangerouslySetInnerHTML={{ __html: article.content }} className="mt-10 text-white leading-[1.8] [&>p]:mb-[20px]" />
+              <div dangerouslySetInnerHTML={{ __html: article.content }} className="mt-10 text-text leading-[1.8] [&>p]:mb-[20px]" />
            )}
         </div>
 
         {/* Source Attribution Block */}
-        <div className="mt-16 p-6 sm:p-10 bg-white/5 border border-white/10 rounded-2xl flex flex-col sm:flex-row items-center gap-8 text-center sm:text-left relative overflow-hidden">
+        <div className="mt-16 p-6 sm:p-10 bg-card-hover border border-border rounded-2xl flex flex-col sm:flex-row items-center gap-8 text-center sm:text-left relative overflow-hidden">
            <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 blur-[50px] rounded-full -mr-20 -mt-20"></div>
            <img src={article.sourceLogo} alt={article.source} className="w-20 h-20 rounded-2xl bg-white object-contain p-2 shadow-lg z-10" />
            <div className="z-10 flex-1">
-              <h4 className="text-[22px] font-bold text-white mb-3">Source: {article.source}</h4>
+              <h4 className="text-[22px] font-bold text-text mb-3">Source: {article.source}</h4>
               <p className="text-[16px] text-gray-300 leading-[1.8] max-w-xl">
                  News originally published by the source. Content displayed inside Verse Hub for educational purposes only. For full context and original reporting, please visit the source.
               </p>
@@ -252,20 +252,20 @@ export function NewsReader() {
         </div>
 
         {/* Multi-story Navigation */}
-        <div className="mt-16 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="mt-16 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-2 gap-4">
            {prevArticle ? (
               <Link 
                  to={`/news/${encodeURIComponent(prevArticle.id || prevArticle.headline)}`}
                  state={{ article: prevArticle, newsList: allNews }}
                  onClick={() => trackEvent('Previous Story Clicked', { current_headline: article.headline, new_headline: prevArticle.headline })}
-                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group text-left"
+                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-card-hover border border-transparent hover:border-border transition-colors group text-left"
               >
-                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
+                 <div className="w-10 h-10 rounded-full bg-card-hover flex items-center justify-center group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
                     <ChevronLeft className="w-5 h-5" />
                  </div>
                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1">Previous Story</span>
-                    <span className="text-sm font-bold text-white/90 truncate block">{prevArticle.headline}</span>
+                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest block mb-1">Previous Story</span>
+                    <span className="text-sm font-bold text-text-muted truncate block">{prevArticle.headline}</span>
                  </div>
               </Link>
            ) : <div />}
@@ -275,13 +275,13 @@ export function NewsReader() {
                  to={`/news/${encodeURIComponent(nextArticle.id || nextArticle.headline)}`}
                  state={{ article: nextArticle, newsList: allNews }}
                  onClick={() => trackEvent('Next Story Clicked', { current_headline: article.headline, new_headline: nextArticle.headline })}
-                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group text-right justify-end"
+                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-card-hover border border-transparent hover:border-border transition-colors group text-right justify-end"
               >
                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1">Next Story</span>
-                    <span className="text-sm font-bold text-white/90 truncate block">{nextArticle.headline}</span>
+                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest block mb-1">Next Story</span>
+                    <span className="text-sm font-bold text-text-muted truncate block">{nextArticle.headline}</span>
                  </div>
-                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:text-purple-400 transition-colors shrink-0">
+                 <div className="w-10 h-10 rounded-full bg-card-hover flex items-center justify-center group-hover:bg-purple-500/20 group-hover:text-purple-400 transition-colors shrink-0">
                     <ChevronRight className="w-5 h-5" />
                  </div>
               </Link>
@@ -301,9 +301,9 @@ export function NewsReader() {
                           to={`/news/${encodeURIComponent(rel.id || rel.headline)}`}
                           state={{ article: rel, newsList: allNews }}
                           onClick={() => trackEvent('Related Article Clicked', { current_headline: article.headline, next_headline: rel.headline })}
-                          className="group flex flex-col bg-[#0A1020] border border-white/5 hover:border-cyan-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1"
+                          className="group flex flex-col bg-[#0A1020] border border-border hover:border-cyan-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1"
                        >
-                          <div className="h-32 w-full bg-black/50 overflow-hidden relative">
+                          <div className="h-32 w-full bg-card overflow-hidden relative">
                              <img 
                                 src={relImgUrl} 
                                 alt={rel.headline} 
@@ -316,7 +316,7 @@ export function NewsReader() {
                           <div className="p-4 flex flex-col flex-1">
                              <div className="flex items-center gap-2 mb-2">
                                 <img src={rel.sourceLogo} alt={rel.source} className="w-3.5 h-3.5 rounded-full bg-white" />
-                                <span className="text-[10px] font-black text-white/50 uppercase tracking-widest">{rel.source}</span>
+                                <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">{rel.source}</span>
                              </div>
                              <h4 className="text-sm font-bold leading-snug line-clamp-3 group-hover:text-cyan-400 transition-colors">
                                 {rel.headline}
@@ -330,8 +330,8 @@ export function NewsReader() {
         )}
 
          {/* Continue Exploring */}
-         <div className="mt-20 border-t border-white/10 pt-10">
-            <h3 className="text-xl font-bold mb-6 text-center text-white/80">Continue Exploring Verse Hub</h3>
+         <div className="mt-20 border-t border-border pt-10">
+            <h3 className="text-xl font-bold mb-6 text-center text-text-muted">Continue Exploring Verse Hub</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                <button 
                   onClick={() => {
@@ -341,7 +341,7 @@ export function NewsReader() {
                   className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/20 hover:border-cyan-500/40 transition-all group"
                >
                   <Brain className="w-5 h-5 text-cyan-400 mr-2 group-hover:scale-110 transition-transform" />
-                  <span className="font-bold text-white group-hover:text-cyan-400 transition-colors">Ask Verse AI</span>
+                  <span className="font-bold text-text group-hover:text-cyan-400 transition-colors">Ask Verse AI</span>
                </button>
                <button 
                   onClick={() => {
@@ -351,7 +351,7 @@ export function NewsReader() {
                   className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/20 hover:border-purple-500/40 transition-all group"
                >
                   <Zap className="w-5 h-5 text-purple-400 mr-2 group-hover:scale-110 transition-transform" />
-                  <span className="font-bold text-white group-hover:text-purple-400 transition-colors">Crypto Market</span>
+                  <span className="font-bold text-text group-hover:text-purple-400 transition-colors">Crypto Market</span>
                </button>
                <button 
                   onClick={() => {
@@ -361,7 +361,7 @@ export function NewsReader() {
                   className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 hover:from-green-500/20 hover:to-emerald-500/20 border border-green-500/20 hover:border-green-500/40 transition-all group"
                >
                   <Sparkles className="w-5 h-5 text-green-400 mr-2 group-hover:scale-110 transition-transform" />
-                  <span className="font-bold text-white group-hover:text-green-400 transition-colors">Football Center</span>
+                  <span className="font-bold text-text group-hover:text-green-400 transition-colors">Football Center</span>
                </button>
             </div>
          </div>

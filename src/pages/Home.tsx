@@ -12,6 +12,7 @@ import {
   BarChart3,
   Brain,
   Megaphone,
+  CloudSun,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { TopGainersLiveFeed } from "../components/home/TopGainersLiveFeed";
@@ -22,6 +23,7 @@ import { FootballWidget } from "../components/home/FootballWidget";
 import { VerseEcosystem } from "../components/home/VerseEcosystem";
 import { VerseMindset } from "../components/home/VerseMindset";
 import { AboutVerse } from "../components/home/AboutVerse";
+import { WeatherWidget } from "../components/home/WeatherWidget";
 import { trackEvent } from "../lib/analytics";
 
 export default function Home() {
@@ -151,7 +153,7 @@ export default function Home() {
               <Sparkle className="w-4 h-4 mr-2 text-[#00FFFF]" />
               Premium Intelligence Hub
             </div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.1] text-white">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.1] text-text">
               The Ultimate <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] via-[#00BFFF] to-[#8A2BE2] drop-shadow-[0_0_15px_rgba(0,191,255,0.3)]">
                 Digital Crypto Hub
@@ -198,7 +200,7 @@ export default function Home() {
               >
                 <CardWrap {...(linkProps as any)}>
                   <Card
-                    className={`group relative overflow-hidden h-[380px] md:h-[440px] bg-black/20 backdrop-blur-sm transition-all duration-500 cursor-pointer shadow-lg ${tool.borderClass || ''} ${tool.glow}`}
+                    className={`group relative overflow-hidden h-[380px] md:h-[440px] bg-card backdrop-blur-sm transition-all duration-500 cursor-pointer shadow-lg ${tool.borderClass || ''} ${tool.glow}`}
                   >
                     {/* Background Image */}
                     <div className="absolute inset-0 z-0">
@@ -217,18 +219,18 @@ export default function Home() {
   
                     <CardContent className="relative z-10 p-5 md:p-8 h-full flex flex-col pt-6 md:pt-8">
                       <div
-                        className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-auto shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md bg-black/40 ${tool.color} border border-white/20 group-hover:-translate-y-2 group-hover:scale-110 transition-all duration-500`}
+                        className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-auto shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md bg-card ${tool.color} border border-border group-hover:-translate-y-2 group-hover:scale-110 transition-all duration-500`}
                       >
                         <tool.icon className="w-6 h-6 md:w-8 md:h-8" />
                       </div>
   
                       <div className="mt-auto transform group-hover:-translate-y-2 transition-transform duration-500">
                         <h3
-                          className={`text-2xl md:text-4xl font-black mb-2 md:mb-3 text-white drop-shadow-md tracking-tight`}
+                          className={`text-2xl md:text-4xl font-black mb-2 md:mb-3 text-text drop-shadow-md tracking-tight`}
                         >
                           {tool.title}
                         </h3>
-                        <p className="text-[13px] md:text-[15px] text-white/90 leading-relaxed drop-shadow-sm font-medium">
+                        <p className="text-[13px] md:text-[15px] text-text-muted leading-relaxed drop-shadow-sm font-medium">
                           {tool.desc}
                         </p>
   
@@ -246,10 +248,6 @@ export default function Home() {
           })}
         </div>
       </section>
-
-      <VerseMindset />
-
-      <VerseEcosystem />
 
       {/* Crypto Market Section */}
       <section className="relative z-10 w-full px-4 mt-6">
@@ -270,6 +268,28 @@ export default function Home() {
           <CryptoLiveNewsWidget />
         </motion.div>
       </section>
+
+      {/* Verse Weather Section */}
+      <section className="relative z-10 w-full px-4 mt-16">
+        <div className="flex items-center gap-4 mb-8">
+           <div className="w-12 h-12 rounded-2xl bg-[#00FFFF]/20 border border-[#00FFFF]/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,255,255,0.4)]">
+             <CloudSun className="w-6 h-6 text-[#00FFFF]" />
+           </div>
+           <h2 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#00BFFF] drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">VERSE WEATHER</h2>
+        </div>
+        <motion.div
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.15, duration: 0.5 }}
+           className="flex flex-col gap-6"
+        >
+          <WeatherWidget />
+        </motion.div>
+      </section>
+
+      <VerseMindset />
+
+      <VerseEcosystem />
 
       {/* Verse Football Section */}
       <section className="relative z-10 w-full px-4 mt-16">

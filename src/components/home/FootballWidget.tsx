@@ -98,35 +98,35 @@ export function FootballWidget() {
                const detailText = event.status.type.detail;
                
                return (
-                  <Card key={event.id} onClick={() => handleMatchClick(event.name)} className="bg-[rgba(0,0,0,0.45)] backdrop-blur-xl border border-white/10 hover:border-[#00FF88]/60 transition-all duration-300 cursor-pointer group/card overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(0,255,136,0.4)]">
-                     <div className="bg-black/40 px-4 py-2 text-[10px] font-black tracking-widest flex justify-between uppercase border-b border-white/10">
+                  <Card key={event.id} onClick={() => handleMatchClick(event.name)} className="bg-[rgba(0,0,0,0.45)] backdrop-blur-xl border border-border hover:border-[#00FF88]/60 transition-all duration-300 cursor-pointer group/card overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(0,255,136,0.4)]">
+                     <div className="bg-card px-4 py-2 text-[10px] font-black tracking-widest flex justify-between uppercase border-b border-border">
                         <span className={matchStatus === 'in' ? 'text-[#00FF88] animate-pulse flex items-center gap-1 drop-shadow-[0_0_5px_rgba(0,255,136,0.8)]' : 'text-[#00D4FF]'}><Activity className="w-3 h-3" /> {detailText}</span>
-                        <span className="text-white/60 font-bold">{event.name}</span>
+                        <span className="text-text-muted font-bold">{event.name}</span>
                      </div>
                      <CardContent className="p-5 flex justify-between items-center relative">
                         {/* Inner card glow */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,136,0.1)_0%,transparent_70%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                         <div className="flex flex-col items-center gap-2 w-[40%] relative z-10">
-                           <div className="w-14 h-14 md:w-16 md:h-16 bg-[#050816]/80 rounded-full p-2 border border-white/10 group-hover/card:border-[#00D4FF]/50 group-hover/card:shadow-[0_0_15px_rgba(0,212,255,0.4)] transition-all flex items-center justify-center">
+                           <div className="w-14 h-14 md:w-16 md:h-16 bg-[#050816]/80 rounded-full p-2 border border-border group-hover/card:border-[#00D4FF]/50 group-hover/card:shadow-[0_0_15px_rgba(0,212,255,0.4)] transition-all flex items-center justify-center">
                               <img src={home?.team?.logo || 'https://via.placeholder.com/64'} alt={home?.team?.name} className="w-full h-full object-contain" />
                            </div>
-                           <span className="font-bold text-white text-sm md:text-base text-center group-hover/card:text-[#00D4FF] transition-colors">{home?.team?.shortDisplayName || home?.team?.name}</span>
+                           <span className="font-bold text-text text-sm md:text-base text-center group-hover/card:text-[#00D4FF] transition-colors">{home?.team?.shortDisplayName || home?.team?.name}</span>
                         </div>
                         
                         <div className="flex flex-col items-center gap-1 w-[20%] relative z-10">
                            <div className="text-3xl md:text-4xl font-black flex items-center justify-center gap-2">
-                              <span className={matchStatus === 'pre' ? 'text-white/30' : 'text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00FF88] drop-shadow-[0_0_15px_rgba(0,255,136,0.6)]'}>{home?.score ?? '-'}</span>
-                              <span className="text-white/30 text-xl font-normal mb-1">:</span>
-                              <span className={matchStatus === 'pre' ? 'text-white/30' : 'text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00FF88] drop-shadow-[0_0_15px_rgba(0,255,136,0.6)]'}>{away?.score ?? '-'}</span>
+                              <span className={matchStatus === 'pre' ? 'text-text-muted' : 'text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00FF88] drop-shadow-[0_0_15px_rgba(0,255,136,0.6)]'}>{home?.score ?? '-'}</span>
+                              <span className="text-text-muted text-xl font-normal mb-1">:</span>
+                              <span className={matchStatus === 'pre' ? 'text-text-muted' : 'text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00FF88] drop-shadow-[0_0_15px_rgba(0,255,136,0.6)]'}>{away?.score ?? '-'}</span>
                            </div>
                         </div>
 
                         <div className="flex flex-col items-center gap-2 w-[40%] relative z-10">
-                           <div className="w-14 h-14 md:w-16 md:h-16 bg-[#050816]/80 rounded-full p-2 border border-white/10 group-hover/card:border-[#8B5CF6]/50 group-hover/card:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all flex items-center justify-center">
+                           <div className="w-14 h-14 md:w-16 md:h-16 bg-[#050816]/80 rounded-full p-2 border border-border group-hover/card:border-[#8B5CF6]/50 group-hover/card:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all flex items-center justify-center">
                               <img src={away?.team?.logo || 'https://via.placeholder.com/64'} alt={away?.team?.name} className="w-full h-full object-contain" />
                            </div>
-                           <span className="font-bold text-white text-sm md:text-base text-center group-hover/card:text-[#8B5CF6] transition-colors">{away?.team?.shortDisplayName || away?.team?.name}</span>
+                           <span className="font-bold text-text text-sm md:text-base text-center group-hover/card:text-[#8B5CF6] transition-colors">{away?.team?.shortDisplayName || away?.team?.name}</span>
                         </div>
                      </CardContent>
                   </Card>
@@ -134,11 +134,11 @@ export function FootballWidget() {
             })}
          </div>
 
-         <div className="mt-8 flex justify-center backdrop-blur-sm bg-black/20 p-3 rounded-2xl border border-white/10">
+         <div className="mt-8 flex justify-center backdrop-blur-sm bg-card p-3 rounded-2xl border border-border">
             <div className="flex flex-wrap items-center gap-4 md:gap-8 text-[#00FF88]/80 text-xs md:text-sm font-bold uppercase tracking-wider w-full justify-center">
-               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Team Standings' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Trophy className="w-4 h-4" /> Team Standings</span>
-               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Match Schedule' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><CalendarDays className="w-4 h-4" /> Match Schedule</span>
-               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Top Scorers' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"><Flame className="w-4 h-4" /> Top Scorers</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Team Standings' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-text transition-colors cursor-pointer"><Trophy className="w-4 h-4" /> Team Standings</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Match Schedule' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-text transition-colors cursor-pointer"><CalendarDays className="w-4 h-4" /> Match Schedule</span>
+               <span onClick={() => { trackEvent('Football Widget Quick Link', { link: 'Top Scorers' }); navigate('/football'); }} className="flex items-center gap-1.5 hover:text-text transition-colors cursor-pointer"><Flame className="w-4 h-4" /> Top Scorers</span>
             </div>
          </div>
        </div>

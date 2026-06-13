@@ -52,17 +52,17 @@ export function SplashScreen() {
 
         <p className="text-gray-400 text-xs sm:text-sm font-medium tracking-widest text-center mb-12 uppercase flex flex-wrap justify-center gap-2 sm:gap-3 px-4 leading-loose">
            <span>AI Tools</span>
-           <span className="text-white/20">•</span>
+           <span className="text-text-muted">•</span>
            <span>Crypto Markets</span>
-           <span className="text-white/20">•</span>
+           <span className="text-text-muted">•</span>
            <span>News</span>
-           <span className="text-white/20">•</span>
+           <span className="text-text-muted">•</span>
            <span>Football</span>
-           <span className="text-white/20">•</span>
+           <span className="text-text-muted">•</span>
            <span>Analytics</span>
         </p>
 
-        <p className="text-white/40 text-[10px] sm:text-xs font-mono tracking-widest uppercase">
+        <p className="text-text-muted text-[10px] sm:text-xs font-mono tracking-widest uppercase">
           Powered by Verse Ecosystem
         </p>
       </div>

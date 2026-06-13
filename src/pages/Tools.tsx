@@ -126,14 +126,14 @@ export default function Tools() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search tools..." 
-            className="pl-9 bg-card/50 border-white/10 focus-visible:ring-primary h-12"
+            className="pl-9 bg-card/50 border-border focus-visible:ring-primary h-12"
           />
         </div>
       </div>
 
       {builders.length > 0 && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold border-b border-white/5 pb-4">AI Website Builders</h2>
+          <h2 className="text-2xl font-bold border-b border-border pb-4">AI Website Builders</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {builders.map((tool, i) => (
               <motion.div 
@@ -143,7 +143,7 @@ export default function Tools() {
                 key={tool.name}
               >
                 <a href={tool.url} target="_blank" rel="noopener noreferrer" className="block h-full group">
-                  <Card className="h-full bg-card/40 border-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-sm cursor-pointer relative overflow-hidden flex flex-col group-hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] group-hover:-translate-y-1">
+                  <Card className="h-full bg-card/40 border-border hover:border-border transition-all duration-300 backdrop-blur-sm cursor-pointer relative overflow-hidden flex flex-col group-hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] group-hover:-translate-y-1">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <CardContent className="p-6 relative z-10 flex-1 flex flex-col">
                       <div className="flex justify-between items-start mb-4">
@@ -161,7 +161,7 @@ export default function Tools() {
                       <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
                         {tool.description}
                       </p>
-                      <div className="text-xs text-muted-foreground font-mono truncate border-t border-white/5 pt-4 mt-auto">
+                      <div className="text-xs text-muted-foreground font-mono truncate border-t border-border pt-4 mt-auto">
                         {tool.url.replace('https://', '')}
                       </div>
                     </CardContent>
@@ -175,7 +175,7 @@ export default function Tools() {
 
       {publishers.length > 0 && (
         <section className="space-y-6 pt-4">
-          <h2 className="text-2xl font-bold border-b border-white/5 pb-4">Publishing Platforms</h2>
+          <h2 className="text-2xl font-bold border-b border-border pb-4">Publishing Platforms</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {publishers.map((tool, i) => (
               <motion.div 
@@ -185,7 +185,7 @@ export default function Tools() {
                 key={tool.name}
               >
                 <a href={tool.url} target="_blank" rel="noopener noreferrer" className="block h-full group">
-                  <Card className="h-full bg-card/40 border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden p-6 relative group-hover:shadow-[0_0_30px_rgba(56,189,248,0.1)] group-hover:-translate-y-1">
+                  <Card className="h-full bg-card/40 border-border hover:border-border transition-all duration-300 cursor-pointer overflow-hidden p-6 relative group-hover:shadow-[0_0_30px_rgba(56,189,248,0.1)] group-hover:-translate-y-1">
                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                      <div className="relative z-10 flex flex-col h-full">
                        <div className="flex items-center justify-between mb-4">
@@ -209,7 +209,7 @@ export default function Tools() {
       )}
 
       {filteredTools.length === 0 && (
-        <div className="text-center py-20 bg-card/20 rounded-xl border border-white/5">
+        <div className="text-center py-20 bg-card/20 rounded-xl border border-border">
            <Search className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
            <p className="text-lg text-muted-foreground">No tools found matching "{searchQuery}"</p>
         </div>

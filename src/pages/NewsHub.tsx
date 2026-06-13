@@ -83,7 +83,7 @@ export function NewsHub() {
   });
 
   return (
-    <div className="min-h-screen bg-[#050816] text-white">
+    <div className="min-h-screen bg-[#050816] text-text">
       <div className="pt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 pb-20">
         
         {/* Header */}
@@ -98,17 +98,17 @@ export function NewsHub() {
            <div className="flex items-center gap-4 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="h-4 w-4 text-white/40" />
+                    <Search className="h-4 w-4 text-text-muted" />
                  </div>
                  <input 
                     type="text" 
                     placeholder="Search news..." 
-                    className="w-full bg-[#0A1020] border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all text-white placeholder-white/40"
+                    className="w-full bg-[#0A1020] border border-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all text-text placeholder-white/40"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                  />
               </div>
-              <button onClick={fetchNews} className="p-2.5 rounded-full bg-[#0A1020] border border-white/10 hover:border-cyan-400/50 text-white/60 hover:text-cyan-400 transition-all">
+              <button onClick={fetchNews} className="p-2.5 rounded-full bg-[#0A1020] border border-border hover:border-cyan-400/50 text-text-muted hover:text-cyan-400 transition-all">
                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               </button>
            </div>
@@ -116,7 +116,7 @@ export function NewsHub() {
 
         {/* Categories */}
         <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2">
-           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 text-sm font-medium mr-2">
+           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card-hover border border-border text-text-muted text-sm font-medium mr-2">
               <Filter className="w-3.5 h-3.5" />
               Filters
            </div>
@@ -124,7 +124,7 @@ export function NewsHub() {
               <button 
                  key={cat}
                  onClick={() => setActiveCategory(cat)}
-                 className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold tracking-wide transition-all border ${activeCategory === cat ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.2)]' : 'bg-[#0A1020] border-white/10 text-white/60 hover:text-white hover:border-white/30'}`}
+                 className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold tracking-wide transition-all border ${activeCategory === cat ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.2)]' : 'bg-[#0A1020] border-border text-text-muted hover:text-text hover:border-border'}`}
               >
                  {cat}
               </button>
@@ -137,8 +137,8 @@ export function NewsHub() {
               <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
            </div>
         ) : filteredNews.length === 0 ? (
-           <div className="flex flex-col items-center justify-center min-h-[300px] bg-[#0A1020] rounded-3xl border border-white/10">
-              <div className="text-white/40 mb-2">No news found for this category or search.</div>
+           <div className="flex flex-col items-center justify-center min-h-[300px] bg-[#0A1020] rounded-3xl border border-border">
+              <div className="text-text-muted mb-2">No news found for this category or search.</div>
               <button onClick={() => { setSearchQuery(""); setActiveCategory("All"); }} className="text-cyan-400 hover:text-cyan-300 text-sm font-bold">Clear Filters</button>
            </div>
         ) : (
@@ -164,7 +164,7 @@ export function NewsHub() {
                        onClick={() => navigate(`/news/${encodeURIComponent(item.id || item.headline)}`, { state: { article: item, newsList: news } })}
                     >
                        {/* Image Banner */}
-                       <div className="w-full h-48 sm:h-56 relative overflow-hidden bg-black/50">
+                       <div className="w-full h-48 sm:h-56 relative overflow-hidden bg-card">
                           <img src={imageUrl} alt={item.headline} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#0B1221] via-transparent to-transparent"></div>
                           <div className="absolute top-4 left-4">
@@ -178,19 +178,19 @@ export function NewsHub() {
                        {/* Content */}
                        <div className="flex flex-col flex-1 p-6 relative">
                           <div className="flex-1">
-                             <h4 className="text-xl font-bold text-white tracking-normal leading-snug line-clamp-2 mb-3">
+                             <h4 className="text-xl font-bold text-text tracking-normal leading-snug line-clamp-2 mb-3">
                                 {item.headline || (item as any).title || "News title unavailable"}
                              </h4>
-                             <p className="text-sm text-white/60 line-clamp-2 leading-relaxed">
+                             <p className="text-sm text-text-muted line-clamp-2 leading-relaxed">
                                 {item.summary || "No summary available. Click to read the full details of this cryptocurrency news article."}
                              </p>
                           </div>
 
-                          <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                          <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
                              <span className="text-[12px] font-mono text-gray-400 flex items-center gap-1.5">
                                 <Clock className="w-3.5 h-3.5 text-gray-500" /> {timeAgo(item.time)}
                              </span>
-                             <button className="inline-flex items-center justify-center gap-2 text-[14px] font-bold text-white bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] group-hover:from-[#2563EB] group-hover:to-[#7C3AED] px-4 py-2 rounded-[999px] transition-all duration-300 shadow-[0_0_15px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]">
+                             <button className="inline-flex items-center justify-center gap-2 text-[14px] font-bold text-text bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] group-hover:from-[#2563EB] group-hover:to-[#7C3AED] px-4 py-2 rounded-[999px] transition-all duration-300 shadow-[0_0_15px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]">
                                 📖 Read Full News
                              </button>
                           </div>

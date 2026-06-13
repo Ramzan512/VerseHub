@@ -83,7 +83,7 @@ export function VerseEcosystem() {
           <img src="https://i.postimg.cc/mg6FZkJH/IMG-20260531-120027.png" alt="Verse Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
           VERSE ECOSYSTEM
         </h2>
-        <p className="text-white/60 font-medium max-w-2xl text-sm md:text-base">
+        <p className="text-text-muted font-medium max-w-2xl text-sm md:text-base">
           Connect with the official Verse community, discover events, learn about the ecosystem and stay updated.
         </p>
       </div>
@@ -99,7 +99,7 @@ export function VerseEcosystem() {
           >
             <a href={card.link} target="_blank" rel="noopener noreferrer" className="block h-full group">
               <Card className={`h-full bg-gradient-to-br ${card.colors} border-2 ${card.border} backdrop-blur-xl shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] rounded-[2rem] overflow-hidden relative transition-all duration-500 hover:-translate-y-2`}>
-                <div className="absolute inset-0 bg-white/5 backdrop-blur-sm z-0 pointer-events-none" />
+                <div className="absolute inset-0 bg-card-hover backdrop-blur-sm z-0 pointer-events-none" />
                 
                 {/* Glow on hover */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,215,0,0.15)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -107,7 +107,7 @@ export function VerseEcosystem() {
                 <CardContent className="p-6 relative z-10 h-full flex flex-col">
                   <div className="flex justify-between items-start mb-6">
                     <div className="relative">
-                      <div className={`w-14 h-14 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform duration-500 ${card.pulse ? 'animate-pulse shadow-[0_0_15px_rgba(0,229,255,0.4)]' : ''}`}>
+                      <div className={`w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform duration-500 ${card.pulse ? 'animate-pulse shadow-[0_0_15px_rgba(0,229,255,0.4)]' : ''}`}>
                         <card.icon className={`w-7 h-7 ${card.iconColor} drop-shadow-md`} />
                       </div>
                     </div>
@@ -118,11 +118,11 @@ export function VerseEcosystem() {
                     )}
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#FFD700] transition-colors">{card.title}</h3>
-                  <p className="text-white/70 text-sm font-medium leading-relaxed mb-6 flex-1">{card.desc}</p>
+                  <h3 className="text-xl font-bold text-text mb-3 group-hover:text-[#FFD700] transition-colors">{card.title}</h3>
+                  <p className="text-text-muted text-sm font-medium leading-relaxed mb-6 flex-1">{card.desc}</p>
 
-                  <div className="mt-auto pt-4 border-t border-white/10">
-                    <Button className="w-full rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-white font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all group-hover:shadow-[0_0_25px_rgba(255,215,0,0.6)]">
+                  <div className="mt-auto pt-4 border-t border-border">
+                    <Button className="w-full rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] hover:from-[#2563EB] hover:to-[#7C3AED] text-text font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)] border border-[#FFD700] transition-all group-hover:shadow-[0_0_25px_rgba(255,215,0,0.6)]">
                       {card.btn}
                       <ExternalLink className="w-4 h-4 ml-2" />
                     </Button>

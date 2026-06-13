@@ -15,7 +15,7 @@ export function Footer() {
           
           {/* LEGAL */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-lg tracking-wider mb-6 flex items-center gap-2">
+            <h4 className="text-text font-bold text-lg tracking-wider mb-6 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>
               LEGAL
             </h4>
@@ -32,7 +32,7 @@ export function Footer() {
 
           {/* VERSE ECOSYSTEM */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-lg tracking-wider mb-6 flex items-center gap-2">
+            <h4 className="text-text font-bold text-lg tracking-wider mb-6 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]"></span>
               VERSE ECOSYSTEM
             </h4>
@@ -66,7 +66,7 @@ export function Footer() {
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
 
           <div className="text-center w-full flex flex-col items-center gap-2">
-            <p className="text-white text-lg sm:text-xl font-bold tracking-wide [text-shadow:0_0_15px_rgba(34,211,238,0.6)]">
+            <p className="text-text text-lg sm:text-xl font-bold tracking-wide [text-shadow:0_0_15px_rgba(34,211,238,0.6)]">
               © 2026 Verse Hub
             </p>
             <p className="text-gray-300 text-sm sm:text-base font-medium">

@@ -17,6 +17,7 @@ const Football = lazy(() => import('./pages/Football'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NewsHub = lazy(() => import('./pages/NewsHub').then(module => ({ default: module.NewsHub })));
 const NewsReader = lazy(() => import('./pages/NewsReader').then(module => ({ default: module.NewsReader })));
+const WeatherHub = lazy(() => import('./pages/WeatherHub'));
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/news" element={<NewsHub />} />
               <Route path="/news/:id" element={<NewsReader />} />
+              <Route path="/weather" element={<WeatherHub />} />
             </Route>
           </Routes>
         </Suspense>

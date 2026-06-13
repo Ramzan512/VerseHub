@@ -92,11 +92,11 @@ export function FearGreedWidget() {
       onClick={() => trackEvent('Market Widget Clicked', { sentiment: classificationText, score: value.toString() })}
       className="cursor-pointer hover:scale-[1.02] h-full bg-gradient-to-br from-[#38BDF8] via-[#8B5CF6] to-[#6366F1] border-2 border-[#FFD700] backdrop-blur-xl shadow-[0_0_30px_rgba(0,229,255,0.4),_0_0_30px_rgba(139,92,246,0.4)] rounded-[2rem] overflow-hidden relative group transition-all flex flex-col items-center"
     >
-      <div className="absolute inset-0 bg-white/5 backdrop-blur-md z-0" />
+      <div className="absolute inset-0 bg-card-hover backdrop-blur-md z-0" />
       <CardContent className="p-8 md:p-12 relative z-10 flex flex-col h-full w-full flex-1">
         <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4 w-full text-center md:text-left">
-           <h3 className="text-2xl md:text-3xl font-black text-white drop-shadow-md flex items-center gap-3">
-             <Gauge className="w-8 h-8 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+           <h3 className="text-2xl md:text-3xl font-black text-text drop-shadow-md flex items-center gap-3">
+             <Gauge className="w-8 h-8 text-text drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
              Fear & Greed Index
            </h3>
            <div className={`px-6 py-2 rounded-full text-sm md:text-base font-black ${bgClass} ${colorClass} ${borderClass} border-2 shadow-lg backdrop-blur-lg flex items-center justify-center uppercase tracking-wider`}>
@@ -127,11 +127,11 @@ export function FearGreedWidget() {
           </div>
           
           <div className="flex flex-col items-center mt-10">
-            <p className="text-white/90 font-bold text-sm md:text-base uppercase tracking-widest drop-shadow-md">Current Score</p>
+            <p className="text-text-muted font-bold text-sm md:text-base uppercase tracking-widest drop-shadow-md">Current Score</p>
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/20 w-full flex flex-col md:flex-row items-center justify-between gap-4 text-sm md:text-base text-white font-bold drop-shadow-md">
+        <div className="mt-12 pt-6 border-t border-border w-full flex flex-col md:flex-row items-center justify-between gap-4 text-sm md:text-base text-text font-bold drop-shadow-md">
           <div className="flex items-center gap-2">
             <span className="opacity-80">Market Sentiment:</span>
             <span className={`${colorClass}`}>{classificationText}</span>

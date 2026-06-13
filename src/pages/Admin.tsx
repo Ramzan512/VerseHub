@@ -74,8 +74,8 @@ export default function Admin() {
               <div className="w-16 h-16 bg-[#00BFFF]/20 rounded-full flex items-center justify-center mb-4 border border-[#00BFFF]/50">
                 <ShieldCheck className="w-8 h-8 text-[#00FFFF]" />
               </div>
-              <h1 className="text-2xl font-bold text-white mb-2">Admin Panel</h1>
-              <p className="text-white/60 text-sm">Enter password to access admin controls</p>
+              <h1 className="text-2xl font-bold text-text mb-2">Admin Panel</h1>
+              <p className="text-text-muted text-sm">Enter password to access admin controls</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
@@ -84,7 +84,7 @@ export default function Admin() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00BFFF] focus:ring-1 focus:ring-[#00BFFF] transition-all text-center tracking-widest text-lg"
+                  className="w-full bg-card border border-border rounded-xl px-4 py-3 text-text focus:outline-none focus:border-[#00BFFF] focus:ring-1 focus:ring-[#00BFFF] transition-all text-center tracking-widest text-lg"
                   placeholder="••••"
                   autoFocus
                 />
@@ -104,10 +104,10 @@ export default function Admin() {
     <div className="max-w-6xl mx-auto space-y-8 pt-6 pb-20 px-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3 text-white">
+          <h1 className="text-3xl font-bold flex items-center gap-3 text-text">
             <Settings className="w-8 h-8 text-[#00FFFF]" /> Admin Dashboard
           </h1>
-          <p className="text-white/60 mt-2 text-lg">Manage platform content and settings.</p>
+          <p className="text-text-muted mt-2 text-lg">Manage platform content and settings.</p>
         </div>
         <Button onClick={handleLogout} variant="outline" className="gap-2 border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300">
           <LogOut className="w-4 h-4" />
@@ -117,16 +117,16 @@ export default function Admin() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* 1. Announcement Manager */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
+        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-border overflow-hidden relative group">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
+            <h3 className="text-xl font-bold text-text flex items-center gap-2 mb-4">
                <AlertCircle className="w-5 h-5 text-yellow-400" /> Announcements
             </h3>
             <div className="space-y-4">
                <textarea
                  value={announcement}
                  onChange={(e) => setAnnouncement(e.target.value)}
-                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-yellow-500/50 focus:outline-none min-h-[100px]"
+                 className="w-full bg-card border border-border rounded-lg p-3 text-text focus:border-yellow-500/50 focus:outline-none min-h-[100px]"
                  placeholder="Enter announcement text..."
                />
             </div>
@@ -134,16 +134,16 @@ export default function Admin() {
         </Card>
 
         {/* 2. Events Manager */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
+        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-border overflow-hidden relative group">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
+            <h3 className="text-xl font-bold text-text flex items-center gap-2 mb-4">
                <Activity className="w-5 h-5 text-purple-400" /> Events & Notices
             </h3>
             <div className="space-y-4">
                <textarea
                  value={eventNotice}
                  onChange={(e) => setEventNotice(e.target.value)}
-                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500/50 focus:outline-none min-h-[100px]"
+                 className="w-full bg-card border border-border rounded-lg p-3 text-text focus:border-purple-500/50 focus:outline-none min-h-[100px]"
                  placeholder="Enter event details or notices..."
                />
             </div>
@@ -151,16 +151,16 @@ export default function Admin() {
         </Card>
 
         {/* 3. Homepage Alerts */}
-        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-white/10 overflow-hidden relative group">
+        <Card className="bg-gradient-to-br from-black/40 to-black/20 border-border overflow-hidden relative group">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
+            <h3 className="text-xl font-bold text-text flex items-center gap-2 mb-4">
                <Edit3 className="w-5 h-5 text-cyan-400" /> Homepage Alert Box
             </h3>
             <div className="space-y-4">
                <textarea
                  value={homepageAlert}
                  onChange={(e) => setHomepageAlert(e.target.value)}
-                 className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500/50 focus:outline-none min-h-[100px]"
+                 className="w-full bg-card border border-border rounded-lg p-3 text-text focus:border-cyan-500/50 focus:outline-none min-h-[100px]"
                  placeholder="Important alert banner for homepage..."
                />
             </div>
